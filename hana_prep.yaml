@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 
 ---
-- hosts: saphana
+- hosts: tag_saphana
 
   remote_user: root
 
