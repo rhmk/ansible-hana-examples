@@ -14,20 +14,20 @@ logvols:
     vol: vg00
     mountpoint: /hana/shared
   hana_data:
-  	size: 24G
-  	vol: vg00
-  	mountpoint: /hana/data
+    size: 24G
+    vol: vg00
+    mountpoint: /hana/data
   hana_logs:
-  	size: 12G
-  	vol: vg00
-  	mountpoint: /hana/logs
+    size: 12G
+    vol: vg00
+    mountpoint: /hana/logs
   install:
-  	size: 128G
-  	vol: vg00
-  	mountpoint: /install
+    size: 128G
+    vol: vg00
+    mountpoint: /install
   usr_sap:
-  	size: 49G
-  	vol: vg01
-  	mountpoint: /usr/sap
-  	
+    size: 49G
+    vol: vg01
+    mountpoint: /usr/sap
+
 ...
