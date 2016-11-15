@@ -1,0 +1,31 @@
+---
+
+disk_partitioning: true
+
+ntpserver: ntp.mcs.hpemea.net
+
+disks:
+	/dev/vdc: vg00
+	/dev/vdb: vg01
+logvols:
+	hana_shared:
+	  size: 24G
+	  vol: vg00
+	  mountpoint: /hana/shared
+	hana_data:
+	  size: 24G
+	  vol: vg00
+	  mountpoint: /hana/data
+	hana_logs:
+	  size: 12G
+	  vol: vg00
+	  mountpoint: /hana/logs
+	install:
+	  size: 128G
+	  vol: vg00
+	  mountpoint: /install
+	usr_sap:
+	  size: 49G
+	  vol: vg01
+	  mountpoint: /usr/sap
+...

@@ -1,0 +1,43 @@
+---
+
+- name: disable core dumps
+  pam_limits: domain="*" limit_item=core limit_type={{ item }} value=0
+  with_items:
+    - soft
+    - hard
+
+- name: increase file handles to 32800 for sapsys group
+  pam_limits: domain="@sapsys" limit_item=core limit_type={{ item }} value=32800
+  with_items:
+    - soft
+    - hard
+
+- name: set number of process to unlimited for sapsys group
+  pam_limits: domain="@sapsys" limit_item=nproc limit_type={{ item }} value=unlimited
+  with_items:
+    - soft
+    - hard
+
+- name: setting kernel tunables
+  sysctl: name={{ item.name }} value={{ item.value }} state=present sysctl_set=yes reload=yes
+  with_items:
+    - { name: net.ipv4.tcp_slow_start_after_idle, value: 0 }
+    - { name: net.ipv4.conf.all.rp_filter, value: 0 }
+    - { name: net.ipv4.ip_local_port_range, value: "40000 61000" }
+    - { name: net.ipv4.neigh.default.gc_thresh1, value: 256 }
+    - { name: net.ipv4.neigh.default.gc_thresh2, value: 1024 }
+    - { name: net.ipv4.neigh.default.gc_thresh3, value: 4096 }
+    - { name: net.ipv6.neigh.default.gc_thresh1, value: 256 }
+    - { name: net.ipv6.neigh.default.gc_thresh2, value: 1024 }
+    - { name: net.ipv6.neigh.default.gc_thresh3, value: 4096 }
+    - { name: kernel.shmmni, value: 65536 }
+    - { name: kernel.msgmni, value: 32768 }
+    - { name: kernel.sem, value: "1250 256000 100 1024" }
+    - { name: kernel.sysrq, value: 1 }
+    - { name: vm.swappiness, value: 60 }
+    - { name: vm.max_map_count, value: 2000000 }
+    - { name: vm.memory_failure_early_kill, value: 1 }
+    - { name: fs.file-max, value: 20000000 }
+    - { name: fs.aio-max-nr, value: 458752 }
+
+...

@@ -1,0 +1,9 @@
+---
+
+- name: regenerate grub2 conf
+  shell: grub2-mkconfig -o /boot/grub2/grub.cfg
+
+- name: restart chronyd
+  service: name=chronyd state=restarted
+
+...

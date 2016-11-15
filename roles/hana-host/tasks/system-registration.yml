@@ -1,0 +1,29 @@
+---
+
+- name: make sure an registration credentials are provided
+  fail:
+    msg: "please provide registration credentials for this system"
+  when:
+    - (reg_activation_key is not defined)
+      OR (reg_organization_id is not defined)
+      OR (reg_sub_name is not defined)
+
+- name: ensure system is registered using known activation key
+  redhat_subscription: 
+    activationkey: "{{ reg_activation_key }}"
+    org_id: "{{ reg_organization_id }}"
+    pool: "{{ reg_sub_name }}"
+    state: present
+
+- name: check repositories system has access to
+  shell: yum repolist warn=no
+  register: repolist
+
+- name: ensure system has access to the right repos
+  shell: "subscription-manager repos --enable={{ item }}"
+  with_items:
+    - rhel-7-server-eus-rpms
+    - rhel-sap-hana-for-rhel-7-server-eus-rpms
+  when: "repolist.stdout.find('{{ item }}') == -1"
+
+...

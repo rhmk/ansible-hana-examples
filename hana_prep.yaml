@@ -1,0 +1,11 @@
+#!/usr/bin/env ansible-playbook
+
+---
+- hosts: saphana
+
+  remote_user: root
+
+  roles:
+    - hana-host
+
+...

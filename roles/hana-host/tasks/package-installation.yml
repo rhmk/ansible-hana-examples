@@ -1,0 +1,48 @@
+---
+
+- name: install required packages
+  yum: state=latest name={{ item }}
+  with_items:
+    - chrony
+    - xfsprogs
+    - libaio
+    - net-tools
+    - bind-utils
+    - gtk2
+    - libicu
+    - xulrunner
+    - tcsh
+    - sudo
+    - libssh2
+    - expect
+    - cairo
+    - graphviz
+    - iptraf-ng
+    - krb5-workstation
+    - krb5-libs
+    - libpng12
+    - nfs-utils
+    - lm_sensors
+    - rsyslog
+    - openssl098e
+    - openssl
+    - PackageKit-gtk3-module
+    - libcanberra-gtk2
+    - libtool-ltdl
+    - xorg-x11-xauth
+    - numactl
+    - tuned-profiles-sap-hana
+
+- name: base packages
+  yum: state=latest name=@base
+
+- name: update system with the latest security fixes
+  shell: yum -y update --security warn=no
+
+- name: copy unrar rpm to temp directory
+  copy: src=unrar-5.0.3-1.el7.rf.x86_64.rpm dest=/tmp/unrar-5.0.3-1.el7.rf.x86_64.rpm
+
+- name: install rar for unpacking HANA
+  yum: name=/tmp/unrar-5.0.3-1.el7.rf.x86_64.rpm state=installed
+
+...

@@ -1,0 +1,11 @@
+---
+
+- include: ./system-registration.yml
+- include: ./package-installation.yml
+- include: ./service-configuration.yml
+- include: ./system-tuning.yml
+- include: ./disk-partitioning.yml
+  when: 
+    - disk_partitioning
+
+...
