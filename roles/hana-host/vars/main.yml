@@ -5,10 +5,10 @@ disk_partitioning: true
 ntpserver: ntp.mcs.hpemea.net
 
 disks:
-	/dev/vdc: vg00
-	/dev/vdb: vg01
+  /dev/vdc: vg00
+  /dev/vdb: vg01
 logvols:
-	hana_shared:
+  hana_shared:
 	  size: 24G
 	  vol: vg00
 	  mountpoint: /hana/shared
