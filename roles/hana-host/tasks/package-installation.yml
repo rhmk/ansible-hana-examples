@@ -39,12 +39,12 @@
   yum: state=latest name=@base
 
 - name: required package groups
-  yum: state=present name={{ item }}
+  yum: state=present name=@{{ item }}
   with_items:
-    - @large-systems
-    - @network-file-system-client
-    - @performance
-    - @compat-librariess
+    - large-systems
+    - network-file-system-client
+    - performance
+    - compat-librariess
 
 - name: ensure minimum systemd version 219-19.el7_2.4
   yum: state=present name=systemd-219-19.el7_2.4
