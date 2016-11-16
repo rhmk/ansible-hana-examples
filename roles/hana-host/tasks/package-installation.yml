@@ -30,6 +30,7 @@
     - libcanberra-gtk2
     - libtool-ltdl
     - xorg-x11-xauth
+    - compat-sap-c++-5
     - numactl
     - tuned
     - tuned-profiles-sap-hana
