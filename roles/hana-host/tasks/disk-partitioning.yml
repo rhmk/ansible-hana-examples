@@ -31,7 +31,7 @@
 
 
 - name: create logical volumes 
-  lvol: state=present vg={{ item.value.vol }} lv=lv_{{ item.key }} size={{ item.value.size }}
+  lvol: state=present vg={{ item.value.vol }} lv=lv_{{ item.key }} size={{ item.value.size }} pvs={{ item.value.pvs }}
   with_dict: "{{ logvols }}"
   tags:
     - disk_init
