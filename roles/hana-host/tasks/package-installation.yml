@@ -31,10 +31,24 @@
     - libtool-ltdl
     - xorg-x11-xauth
     - numactl
+    - compat-libstdc++-33
+    - tuned
     - tuned-profiles-sap-hana
 
 - name: base packages
   yum: state=latest name=@base
+
+- name: required package groups
+  yum: state=present name={{ item }}
+  with_items:
+    - @large-systems
+    - @network-file-system-client
+    - @performance
+    - @compat-librariess
+
+- name: ensure minimum systemd version 219-19.el7_2.4
+  yum: state=present name=systemd-219-19.el7_2.4
+  notify: restart systemd-logind
 
 - name: update system with the latest security fixes
   shell: yum -y update --security warn=no
