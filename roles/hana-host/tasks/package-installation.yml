@@ -31,7 +31,6 @@
     - libtool-ltdl
     - xorg-x11-xauth
     - numactl
-    - compat-libstdc++-33
     - tuned
     - tuned-profiles-sap-hana
 
