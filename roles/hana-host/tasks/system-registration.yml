@@ -3,13 +3,14 @@
 - name: make sure an registration credentials are provided
   fail:
     msg: "please provide registration credentials for this system"
-  when: (reg_activation_key is not defined) or (reg_organization_id is not defined) or (reg_sub_name is not defined)
+  when: (reg_activation_key is not defined) or (reg_organization_id is not defined)
+  #when: (reg_activation_key is not defined) or (reg_organization_id is not defined) or (reg_sub_name is not defined)
 
 - name: ensure system is registered using known activation key
-  redhat_subscription: 
+  redhat_subscription:
     activationkey: "{{ reg_activation_key }}"
     org_id: "{{ reg_organization_id }}"
-    pool: "{{ reg_sub_name }}"
+    # pool: "{{ reg_sub_name }}"
     state: present
 
 - name: check repositories system has access to

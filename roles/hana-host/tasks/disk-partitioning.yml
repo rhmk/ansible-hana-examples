@@ -29,9 +29,8 @@
   tags:
   - disk_init
 
-
 - name: create logical volumes 
-  lvol: state=present vg={{ item.value.vol }} lv=lv_{{ item.key }} size={{ item.value.size }} pvs={{ item.value.pvs }}
+  lvol: state=present vg={{ item.value.vol }} lv=lv_{{ item.key }} size={{ item.value.size }}
   with_dict: "{{ logvols }}"
   tags:
     - disk_init

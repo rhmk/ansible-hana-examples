@@ -30,7 +30,6 @@
     - libcanberra-gtk2
     - libtool-ltdl
     - xorg-x11-xauth
-    - compat-sap-c++-5
     - numactl
     - tuned
     - tuned-profiles-sap-hana
@@ -58,5 +57,9 @@
 
 - name: install rar for unpacking HANA
   yum: name=/tmp/unrar-5.0.3-1.el7.rf.x86_64.rpm state=installed
+
+### TBD:  Now some dependancies need to be checked:
+#  RHEL6 und HANA 1.0 => add compat-sap-c++
+#  RHEL7 und HANA 2.0 => add comapt-sap-c++-5, und noch ein paar weitere 
 
 ...
