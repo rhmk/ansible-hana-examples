@@ -1,10 +1,22 @@
 ---
 
+- name: Enable Debugging
+  debug:
+    verbosity: "{{ debuglevel }}"
+
 - include: ./system-registration.yml
 
-- include: ./package-installation.yml
+- include: ./rhel6/package-installation.yml
+  when: ansible_distribution_major_version == "6"
 
-- include: ./service-configuration.yml
+- include: ./rhel7/package-installation.yml
+  when: ansible_distribution_major_version == "7"
+
+- include: ./rhel6/service-configuration.yml
+  when: ansible_distribution_major_version == "6"
+
+- include: ./rhel7/service-configuration.yml
+  when: ansible_distribution_major_version == "7"
 
 - include: ./system-tuning.yml
 

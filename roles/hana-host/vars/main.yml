@@ -1,6 +1,6 @@
 ---
 
-disk_partitioning: true
+disk_partitioning: false
 
 ntpserver: ntp.mcs.hpemea.net
 

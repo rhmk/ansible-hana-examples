@@ -48,9 +48,13 @@
   shell: /usr/sbin/tuned-adm profile sap-hana-vmware
   when: ansible_virtualization_type == 'vmware'
 
-- name: disable intel c states in grub config
+  # TODO: This is not generally TRUE, because it should only add the parameter to others in the variable ....
+- name: disable intel c states in grub config (RHEL 7)
   lineinfile: dest=/etc/default/grub line=GRUB_CMDLINE_LINUX_DEFAULT="intel_idle.max_cstate=0"
   notify: regenerate grub2 conf
+  when: "ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7'"
+
+  # TODO: find a solution for this for RHEL 6, too
 
 # Create the compatiility links for HANA
 - name: create compatibility links

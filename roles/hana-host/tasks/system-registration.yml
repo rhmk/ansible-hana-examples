@@ -13,15 +13,43 @@
     # pool: "{{ reg_sub_name }}"
     state: present
 
+
+- name: Reset all previous repositories
+  shell: |
+    num=0      
+    for r in /etc/yum.repos.d/*.repo; do
+      num=$(( num + $(grep  -c "^enabled.*=.*1$" $r) ))
+      sed -i 's/^enabled.*=.*1/enabled = 0/g' $r
+    done
+    echo "$num"
+  register: repo_cleanup
+  changed_when: repo_cleanup.stdout > 0
+  failed_when: repo_cleanup.rc > 0
+  when: force_repo_reset
+
 - name: check repositories system has access to
   shell: yum repolist warn=no
   register: repolist
 
+- name: Set latest supported RedHat EUS release
+  shell: |
+    case "{{ ansible_distribution_major_version }}" in
+      6) 
+        subscription-manager release --set=6.7 ;;
+      7)
+        subscription-manager release --set=7.2 ;;
+      *)
+        exit 1 ;;
+    esac
+  register: rh_release
+  changed_when: rh_release.rc == 0
+  failed_when: rh_release.rc > 0
+
 - name: ensure system has access to the right repos
   shell: "subscription-manager repos --enable={{ item }}"
   with_items:
-    - rhel-7-server-eus-rpms
-    - rhel-sap-hana-for-rhel-7-server-eus-rpms
+    - "{{ 'rhel-' + ansible_distribution_major_version + '-server-eus-rpms' }}"
+    - "{{ 'rhel-sap-hana-for-rhel-' + ansible_distribution_major_version + '-server-eus-rpms' }}"
   when: "repolist.stdout.find('{{ item }}') == -1"
 
 ...

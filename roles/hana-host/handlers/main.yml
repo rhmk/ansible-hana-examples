@@ -6,6 +6,9 @@
 - name: restart chronyd
   service: name=chronyd state=restarted
 
+- name: restart ntpd
+  service: name=ntpd state=restarted
+
 - name: restart systemd-logind
   service: name=systemd-logind state=restarted
 
