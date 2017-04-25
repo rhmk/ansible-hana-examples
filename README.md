@@ -13,9 +13,7 @@ Receiving objects: 100% (181/181), 146.76 KiB, done.
 Resolving deltas: 100% (64/64), done.
 </pre>
 
-2. Then you can set the following variables: 
-
-## For using this ansible playbook the following variables need to be set:
+2. The following variables need to be set:
 
 ```
 reg_activation_key:
