@@ -32,24 +32,18 @@
   register: repolist
 
 - name: Set latest supported RedHat EUS release
-  shell: |
-    case "{{ ansible_distribution_major_version }}" in
-      6) 
-        subscription-manager release --set=6.7 ;;
-      7)
-        subscription-manager release --set=7.2 ;;
-      *)
-        exit 1 ;;
-    esac
+  shell: "subscription-manager release --set=6.7" 
   register: rh_release
   changed_when: rh_release.rc == 0
   failed_when: rh_release.rc > 0
+  when: ( ansible_distribution_version != 6.7 )
 
 - name: ensure system has access to the right repos
   shell: "subscription-manager repos --enable={{ item }}"
   with_items:
-    - "{{ 'rhel-' + ansible_distribution_major_version + '-server-eus-rpms' }}"
-    - "{{ 'rhel-sap-hana-for-rhel-' + ansible_distribution_major_version + '-server-eus-rpms' }}"
+    - rhel-6-server-eus-rpms
+    - rhel-sap-hana-for-rhel-6-server-eus-rpms
+    - rhel-sfs-for-rhel-6-server-eus-rpms
   when: "repolist.stdout.find('{{ item }}') == -1"
 
 ...
