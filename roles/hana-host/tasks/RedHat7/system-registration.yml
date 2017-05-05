@@ -1,9 +1,5 @@
 ---
 
-- name: check repositories system has access to
-  shell: yum repolist warn=no
-  register: repolist
-
 - name: Set latest supported RedHat EUS release
   shell: subscription-manager release --set=7.2 
   register: rh_release

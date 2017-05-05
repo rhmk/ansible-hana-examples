@@ -68,8 +68,10 @@ logvols:
 # Gives the name of the customer of the Hana DB
 customer: <string>
 
+# NFS Server mountpoint where install media resides:
+install_nfs: "10.32.97.3:/public/sap-software"
 
-# directory, where Hana install binaries are unpacked
+# directory, where Hana install binaries are needed
 installroot: /install
 
 # Hana Install version (RAR Archive Number)

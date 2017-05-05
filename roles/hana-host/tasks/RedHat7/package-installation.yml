@@ -53,11 +53,8 @@
 - name: update system with the latest security fixes
   shell: yum -y update --security warn=no
 
-- name: copy unrar rpm to temp directory
-  copy: src=unrar-5.0.3-1.el7.rf.x86_64.rpm dest=/tmp/unrar-5.0.3-1.el7.rf.x86_64.rpm
-
 - name: install rar for unpacking HANA
-  yum: name=/tmp/unrar-5.0.3-1.el7.rf.x86_64.rpm state=installed
+  yum: name=https://forensics.cert.org/centos/cert/7/x86_64/unrar-5.3.0-1.el7.x86_64.rpm
 
 ### TBD:  Now some dependancies need to be checked:
 #  RHEL7 und HANA 2.0 => add comapt-sap-c++-5, und noch ein paar weitere 

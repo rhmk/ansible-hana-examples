@@ -15,6 +15,7 @@ disk_partitioning: false
 customer: demoinstall
 
 # directory, where Hana install binaries are unpacked
+install_nfs: "10.32.97.3:/public/sap-software"
 installroot: /install
 installversion: "51051151"
 

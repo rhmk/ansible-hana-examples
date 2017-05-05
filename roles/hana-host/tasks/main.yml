@@ -8,13 +8,41 @@
   when: check_repos
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-registration.yml' }}"
   when: check_repos
+  tags:
+    - osprep
+    - system-registration
 
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/package-installation.yml' }}"
+  tags:
+    - osprep
+    - packages
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/service-configuration.yml' }}"
+  tags:
+    - osprep
+    - services
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-tuning.yml' }}"
+  tags:
+    - osprep
+    - system-tuning
+####
+#TODO:
+# Check correct hostname setting and DNS setting
+####
 
 - include: ./disk-partitioning.yml
   when: 
     - disk_partitioning
+  tags:
+    - osprep
+    - disk_partitioning
+
+- include: ./sap-check-media.yml
+  tags:
+    - hana-install
+    - media-check
+
+- include: ./sap-hana-install.yml
+  tags:
+    - hana-install
 
 ...
