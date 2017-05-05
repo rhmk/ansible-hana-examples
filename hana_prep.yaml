@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 
 ---
-- hosts: tag_saphana
+- hosts: hana-servers
 
   remote_user: root
 
