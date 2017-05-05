@@ -24,10 +24,11 @@
   tags:
     - osprep
     - system-tuning
-####
-#TODO:
-# Check correct hostname setting and DNS setting
-####
+
+- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/check-hostname-dns.yml' }}"
+  tags:
+    - osprep
+    - set-hostname
 
 - include: ./disk-partitioning.yml
   when: 

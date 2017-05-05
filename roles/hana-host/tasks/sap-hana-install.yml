@@ -1,8 +1,5 @@
 ---
 
-- name: check correct hostname configuration
-  shell: [ $(hostname -s) == $(hostname) ] && [ $(hostname -f) == $(hostname).$(hostname -d) ] 
-
 - name: create usr sap directory
   file:
     path: "/usr/sap/{{ sap_system_id|upper }}"
@@ -42,7 +39,7 @@
 
   # TODO Install SAPHOSTAGENT
 
-- name: execute unattended installation (log: /var/log/hana_install.log )
+- name: execute unattended installation (logfile /var/log/hana_install.log )
   shell: ./hdblcm --configfile=/tmp/hana_install_{{ sap_system_id|lower}}.cfg -b --remote_execution=saphostagent >> /var/log/hana_install.log
   args:
     chdir: "{{ installroot }}/{{ installversion }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/"
