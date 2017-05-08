@@ -1,6 +1,30 @@
 ---
 
 - file:
+    name: /hana
+    state: directory
+    owner: root
+    group: root
+
+- file:
+    name: /hana/data
+    state: directory
+    owner: root
+    group: root
+
+- file:
+    name: /hana/log
+    state: directory
+    owner: root
+    group: root
+
+- file:
+    name: /hana/shared
+    state: directory
+    owner: root
+    group: root
+
+- file:
     name: "{{  installroot }}"
     state: directory
     owner: root
