@@ -24,7 +24,6 @@
     - nfs-utils
     - lm_sensors
     - rsyslog
-    - openssl098e
     - openssl
     - PackageKit-gtk3-module
     - libcanberra-gtk2
