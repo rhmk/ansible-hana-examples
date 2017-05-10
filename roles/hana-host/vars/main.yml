@@ -14,8 +14,6 @@ check_repos: true
 # disk setup is done by kickstart, so no need to change anything here
 disk_partitioning: false
 
-disk_partitioning: false
-
 ntpserver: pool.ntp.org
 
 disks:
