@@ -1,0 +1,64 @@
+---
+installroot: /install/shared/hana_inst/51051151/
+sapinstalldir: /install/shared/hana_inst/51051151/
+hostname: dc1system01
+sap_hostagent_sslpassword: Ab01%%bA
+id_user_sapadm: "30200"
+id_group_shm: "30220"
+id_group_sapsys: "30200"
+pw_sapadm: "Adm12356"
+
+# To Change:
+sapsys_groupid: "{{ id_group_sapsys }}"
+sapadm_passwd_clear: "{{ pw_sapadm  }}"
+
+instances:
+  hxe:
+    id_user_sidadm: "30210"
+    pw_sidadm: "Adm12356"
+    pw_systemuser: "System123"
+    sap_system_id: HXE
+    sap_instance: 90
+    sap_hana_system_usage: custom
+    sap_hana_components: "client,server"
+    sap_hana_system_type: "Master"
+    id_group_shm: "30220"
+    sapsystemname_small: hxe 
+    scaleouthosts: dc1system02 
+    sap_hostname_instance: dc1system01
+    addhosts: dc1system01
+    sapsystemname: HXE 
+    sapsystemnummer: 90
+    sapsystem_usage: custom
+    sidadm_passwd_clear: Adm12356
+    sidadm_userid: 30210
+    system_user_password: System123
+    sap_addhosts: dc1system02 
+
+  a01:
+    id_user_sidadm: "20210"
+    pw_sidadm: "Adm12356"
+    pw_systemuser: "System123"
+    sap_system_id: A01 
+    sap_instance: 91
+    sap_hana_system_usage: custom
+    sap_hana_components: "client,server"
+    sap_hana_system_type: "Master"
+    id_group_shm: "20220"
+    sapsystemname_small: a01
+    scaleouthosts: dc1system02 
+    sap_hostname_instance: dc1system01 
+    addhosts: dc1system01
+    sapsystemname: A01
+    sapsystemnummer: 91
+    sapsystem_usage: custom
+    sidadm_passwd_clear: Adm12356
+    sidadm_userid: 20210
+    system_user_password: System123
+    sap_addhosts: dc1system02
+     
+
+
+
+...
+
