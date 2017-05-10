@@ -1,5 +1,8 @@
 ---
 
+- name: install cairo
+  yum: name=cairo state=latest
+
 - name: install required packages
   yum: state=latest name={{ item }}
   with_items:
