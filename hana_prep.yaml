@@ -2,10 +2,12 @@
 
 ---
 - hosts: hana-servers
-
   remote_user: root
+  roles:
+    - hana-host 
 
+- hosts: hana-nodes
+  remote_user: root
   roles:
     - hana-host
-
 ...

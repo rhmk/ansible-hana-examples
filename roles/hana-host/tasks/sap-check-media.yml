@@ -39,11 +39,15 @@
   failed_when: unpack_hana.rc >= 2 
   when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
 
+# Changed Thomas Bludau (20170508)
+# Install directory could named completly different by customer
+# Use only installroot for installation
+# Otherwise you got problems while integrating on customers side ...
+
 - name: Get HANA Version Information
   shell: |
     INSTDIR='{{ installroot }}'
-    VERSION='{{ installversion }}'
-    awk ' ( $1 == "fullversion:" ) { print $2}'  ${INSTDIR}/${VERSION}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/server/manifest
+    awk ' ( $1 == "fullversion:" ) { print $2}'  ${INSTDIR}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/server/manifest
   register: hanaversion
 
 ...

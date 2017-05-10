@@ -42,7 +42,7 @@
 - name: execute unattended installation (logfile /var/log/hana_install.log )
   shell: ./hdblcm --configfile=/tmp/hana_install_{{ sap_system_id|lower}}.cfg -b --remote_execution=saphostagent >> /var/log/hana_install.log
   args:
-    chdir: "{{ installroot }}/{{ installversion }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/"
+    chdir: "{{ installroot }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/"
     creates: "/usr/sap/{{ sap_system_id|upper }}/HDB{{ sap_instance }}/exe/hdbdaemon"
 
 ...

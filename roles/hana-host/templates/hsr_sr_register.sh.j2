@@ -1,0 +1,50 @@
+#!/bin/bash
+if [ "`whoami`" == "root" ]; then
+ echo "Do not execute as root"
+ exit 2
+fi
+
+# Need Sometimes for SR
+# Problem when not reachable
+/usr/sap/hostctrl/exe/sapcontrol -nr {{ sapsystemnummer }} -function StartSystem ALL
+
+# Check if System is active
+while [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ sapsystemnummer }} -function GetSystemInstanceList | grep -E \"(GRAY|YELLOW)\"`" ]; do
+ sleep 1;
+done
+
+echo test
+# Check if system failed
+if [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ sapsystemnummer }} -function GetSystemInstanceList | grep RED`" ]; then
+ echo "HANA Status RED"
+ exit 3;
+fi
+
+
+# Stop System
+/usr/sap/hostctrl/exe/sapcontrol -nr {{ sapsystemnummer }} -function StopSystem ALL
+
+# Check if System is active
+while [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ sapsystemnummer }} -function GetSystemInstanceList | grep -E \"(GREEN|YELLOW)\"`" ]; do
+ sleep 1;
+done
+
+echo test
+# Check if system failed
+if [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ sapsystemnummer }} -function GetSystemInstanceList | grep RED`" ]; then
+ echo "HANA Status RED"
+ exit 3;
+fi
+
+
+# Configure System-Replication
+hdbnsutil -sr_register --name={{ customer }} --replicationMode={{ hsr_replicationmode }} --operationMode={{ hsr_operation_mode }} --remoteHost={{ hsr_type_remote_host }} --remoteInstance={{ sapsystemnummer }} --force_full_replica
+
+/usr/sap/hostctrl/exe/sapcontrol -nr {{ sapsystemnummer }} -function StartSystem
+
+#cat << EOF > /etc/facter/facts.d/hsr{{ sapsystemname_small }}.sh
+##!/bin/bash
+#echo "hsr{{ sapsystemname_small }}=yes"
+#EOF
+#chmod 755 /etc/facter/facts.d/hsr{{ sapsystemname_small }}.sh
+

@@ -4,31 +4,21 @@
   debug:
     verbosity: "{{ debuglevel }}"
 
-- include: ./system-registration-part1.yml
-  when: check_repos
-- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-registration.yml' }}"
-  when: check_repos
-  tags:
-    - osprep
-    - system-registration
+# Changed: Thomas Bludau 20170508
+# Changed on every Customer Side
+# It is necessary that you have a fix repository, 
+# otherwhile addons could not be compatible.
+# Requirement is that the systems are Registed to a
+# existing Repository.
 
-- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/package-installation.yml' }}"
-  tags:
-    - osprep
-    - packages
-- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/service-configuration.yml' }}"
-  tags:
-    - osprep
-    - services
-- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-tuning.yml' }}"
-  tags:
-    - osprep
-    - system-tuning
 
-- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/check-hostname-dns.yml' }}"
-  tags:
-    - osprep
-    - set-hostname
+#- include: ./system-registration-part1.yml
+#  when: check_repos
+#- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-registration.yml' }}"
+#  when: check_repos
+#  tags:
+#    - osprep
+#    - system-registration
 
 - include: ./disk-partitioning.yml
   when: 
@@ -42,7 +32,12 @@
     - hana-install
     - media-check
 
-- include: ./sap-hana-install.yml
+- include: ./preconfigure.yml
+  tags:
+    - hana-install
+
+# Schleife über mehrere Instanzen
+- include: ./deployment.yml
   tags:
     - hana-install
 

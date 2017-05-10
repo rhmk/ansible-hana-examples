@@ -2,10 +2,18 @@
 
 # TODO: This is for the default interface, but should be more flexible
 #
-- name: Set correct entry in /etc/hosts
-  lineinfile: 
-    dest: /etc/hosts
-    line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}" 
+
+
+# Commented by Thomas Bludau (20170508)
+# Longest thing in our discussions. 
+# Best thing is only to check if DNS is working.
+# Most this is added or managed by customer himself.
+# Btw: With more adapters ansible_default_ipv4.address have no values by
+# my installation?!?!
+#- name: Set correct entry in /etc/hosts
+#  lineinfile: 
+#    dest: /etc/hosts
+#    line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}" 
  
 - name: make sure the short hostname is returned with "hostname" command
   shell: |
