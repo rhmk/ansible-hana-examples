@@ -1,7 +1,7 @@
 #!/usr/bin/env ansible-playbook
 
 ---
-- hosts: hana-servers
+- hosts: all
 
   remote_user: root
 
