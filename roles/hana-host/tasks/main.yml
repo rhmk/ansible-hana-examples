@@ -4,8 +4,13 @@
   debug:
     verbosity: "{{ debuglevel }}"
 
+- name: check default gateway
+  shell: route -n
+  register: route
+
 - name: set default gateway
   shell: route add default gw 192.168.0.2
+  when: ( route.stdout != 192.168.0.2 )
 
 - include: ./system-registration-part1.yml
   when: check_repos
