@@ -1,0 +1,22 @@
+---
+
+- name: check repositories system has access to
+  shell: yum repolist warn=no
+  register: repolist
+
+- name: Set latest supported RedHat EUS release
+  shell: "subscription-manager release --set=6.7" 
+  register: rh_release
+  changed_when: rh_release.rc == 0
+  failed_when: rh_release.rc > 0
+  when: ( ansible_distribution_version != 6.7 )
+
+- name: ensure system has access to the right repos
+  shell: "subscription-manager repos --enable={{ item }}"
+  with_items:
+    - rhel-6-server-eus-rpms
+    - rhel-sap-hana-for-rhel-6-server-eus-rpms
+    - rhel-sfs-for-rhel-6-server-eus-rpms
+  when: "repolist.stdout.find('{{ item }}') == -1"
+
+...

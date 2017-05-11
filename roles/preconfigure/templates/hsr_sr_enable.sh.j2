@@ -1,0 +1,14 @@
+#!/bin/bash
+if [ "`whoami`" == "root" ]; then
+ echo "Do not execute as root"
+ exit 2
+fi
+
+hdbnsutil -sr_enable --name={{ customer }}
+
+#cat << EOF > /etc/facter/facts.d/hsr{{ sapsystemname_small }}.sh
+##!/bin/bash
+#echo "hsr{{ sapsystemname_small }}=yes"
+#EOF
+#chmod 755 /etc/facter/facts.d/hsr{{ sapsystemname_small }}.sh
+

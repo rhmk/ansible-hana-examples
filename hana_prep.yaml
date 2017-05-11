@@ -1,13 +1,15 @@
 #!/usr/bin/env ansible-playbook
 
 ---
-- hosts: hana-servers
-  remote_user: root
-  roles:
-    - hana-host 
-
 - hosts: hana-nodes
   remote_user: root
   roles:
-    - hana-host
+    - preconfigure 
+
+- hosts: hana-servers
+  remote_user: root
+  roles:
+    - preconfigure
+    - deployment
+
 ...

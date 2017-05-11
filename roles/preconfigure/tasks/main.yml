@@ -1,0 +1,39 @@
+---
+
+- name: Enable Debugging
+  debug:
+    verbosity: "{{ debuglevel }}"
+
+# Changed: Thomas Bludau 20170508
+# Changed on every Customer Side
+# It is necessary that you have a fix repository, 
+# otherwhile addons could not be compatible.
+# Requirement is that the systems are Registed to a
+# existing Repository.
+
+
+#- include: ./system-registration-part1.yml
+#  when: check_repos
+#- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-registration.yml' }}"
+#  when: check_repos
+#  tags:
+#    - osprep
+#    - system-registration
+
+- include: ./disk-partitioning.yml
+  when: 
+    - disk_partitioning
+  tags:
+    - osprep
+    - disk_partitioning
+
+- include: ./sap-check-media.yml
+  tags:
+    - hana-install
+    - media-check
+
+- include: ./preconfigure.yml
+  tags:
+    - hana-install
+
+...

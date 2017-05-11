@@ -1,0 +1,112 @@
+
+[Server]
+
+# Executes checks, does not install SAP HANA System ( Default: n )
+check_only=n
+
+# Remote Execution ( Default: ssh; Valid values: ssh | saphostagent )
+remote_execution=saphostagent
+
+# Enable the installation or upgrade of the SAP Host Agent ( Default: n )
+install_hostagent=y
+
+# Local Host Name ( Default: devhanarhel60101.solutioncenter.cc )
+hostname={{ item.value.sap_hostname_instance }}
+
+# Additional Hosts
+addhosts={{ item.value.sap_addhosts }}
+
+# Non-standard Shared File System
+checkmnt=
+
+# Installation Path ( Default: /hana/shared )
+sapmnt=/hana/shared
+
+# Install SSH Key ( Default: y )
+install_ssh_key=y
+
+# Root User Name ( Default: root )
+root_user=root
+
+# Root User Password
+root_password=becom123
+
+# SAP Host Agent User (sapadm) Password
+sapadm_password={{ sapadm_passwd_clear }}
+
+# SAP HANA System ID
+sid={{ item.value.sapsystemname }}
+
+# Instance Number ( Valid values: 00 | 01 | 02 | 03 | 04 | 05 | 06 | 07 | 08 | 09 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 | 65 | 66 | 67 | 68 | 69 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 )
+number={{ item.value.sapsystemnummer }}
+
+# Database Mode ( Default: single_container; Valid values: single_container | multiple_containers )
+db_mode=multiple_containers
+
+# Database Isolation ( Default: low; Valid values: low | high )
+db_isolation=low
+
+# System Usage ( Default: custom; Valid values: production | test | development | custom )
+system_usage={{ item.value.sapsystem_usage }}
+
+# System Administrator Password
+password={{ item.value.sidadm_passwd_clear }}
+
+# System Administrator Home Directory ( Default: /usr/sap/${sid}/home )
+home=/usr/sap/${sid}/home
+
+# System Administrator User ID
+userid={{ item.value.sidadm_userid }}
+
+# System Administrator Login Shell ( Default: /bin/sh )
+shell=/bin/sh
+
+# ID of User Group (sapsys)
+groupid={{ sapsys_groupid }}
+
+# Directory containing a storage configuration
+storage_cfg=
+
+# Internal Network Address
+internal_network=
+
+# Location of Data Volumes ( Default: ${sapmnt}/${sid}/global/hdb/data )
+# datapath=${sapmnt}/${sid}/global/hdb/data
+# datapath=/hana/data/${sid}
+
+# Location of Log Volumes ( Default: ${sapmnt}/${sid}/global/hdb/log )
+# logpath=${sapmnt}/${sid}/global/hdb/log
+logpath=/hana/log/${sid}
+
+# Directory containing custom configurations
+custom_cfg=
+
+# Change the initial SSFS key ( Default: y )
+change_initial_ssfs_key=y
+
+# Restrict maximum memory allocation?
+restrict_max_mem=
+
+# Maximum Memory Allocation in MB
+max_mem=
+
+# Database User (SYSTEM) Password
+system_user_password={{ item.value.system_user_password }}
+
+# Restart system after machine reboot? ( Default: n )
+autostart=n
+
+# Inter Service Communication Mode ( Valid values: standard | ssl )
+isc_mode=
+
+# Enable XS Engine ( Default: y )
+xs_engine=y
+
+# XS Engine HTTP Port
+xs_engine_http_port=
+
+# XS Engine HTTPS Port
+xs_engine_https_port=
+
+# Imports delivery units ( Default: y )
+import_content=y

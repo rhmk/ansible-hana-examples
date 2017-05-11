@@ -1,0 +1,74 @@
+---
+
+- name: Crate File for Scale-Out Enviornments
+  template:
+    src: deployment_install_hana_SID.conf.j2
+    dest: /usr/local/bin/install_hana_{{ item.value.sapsystemname_small }}.conf
+    mode: 0755
+  with_dict: "{{ instances }}"
+    
+# Generate Template under Linux
+# ./hdbinst --dump_configfile_template=/tmp/test.cfg
+- name: copy installation answer file
+  template: src=deployment_hana_inst_SID.cfg.j2 dest=/tmp/hana_install_{{ item.value.sap_system_id|lower}}.cfg
+  with_dict: "{{ instances }}"
+
+- name: create usr sap directory
+  file:
+    path: "/usr/sap/{{ item.value.sap_system_id|upper }}"
+    state: directory
+  with_dict: "{{ instances }}"
+
+- name: create hana shared directory
+  file:
+    path: "/hana/shared/{{ item.value.sap_system_id|upper }}"
+    state: directory
+  with_dict: "{{ instances }}"
+
+- name: create hana data directory
+  file:
+    path: "/hana/data/{{ item.value.sap_system_id|upper }}"
+    state: directory
+  with_dict: "{{ instances }}"
+
+- name: create hana log directory
+  file:
+    path: "/hana/log/{{ item.value.sap_system_id|upper }}"
+    state: directory
+  with_dict: "{{ instances }}"
+
+- name: create sap sid group
+  group: name={{ item.value.sap_system_id|lower }}shm gid={{ item.value.id_group_shm }}
+  with_dict: "{{ instances }}"
+
+- name: create sap sid user
+  user:
+    name: "{{ item.value.sap_system_id|lower }}adm"
+    uid: "{{ item.value.id_user_sidadm }}"
+    group: "sapsys"
+    groups: "{{ item.value.sap_system_id|lower }}shm"
+    home: "/usr/sap/{{ item.value.sap_system_id|upper }}/home"
+    password: "{{ item.value.pw_sidadm|password_hash('sha512') }}"
+  with_dict: "{{ instances }}"
+
+- name: copy global.ini
+  copy: src=global.ini dest=/hana/shared/{{ item.value.sap_system_id|upper }}/global.ini
+  with_dict: "{{ instances }}"
+
+# Only Start when:
+# Hostname Resolution is fine!
+# Instance-Hostname is existing and configured
+# Updates are Installed
+# System rebooted (Problems otherwise, while f.e. mounting nfs)
+# Systems already configured (preconfigure)
+# Every System in the Scale-Out Enviornment is ready
+# Only Execute on One System in Scale-Out Enviornment
+
+- name: execute unattended installation (logfile /var/log/hana_install.log )
+  shell: ./hdblcm --configfile=/tmp/hana_install_{{ item.value.sap_system_id|lower}}.cfg -b --remote_execution=saphostagent >> /var/log/hana_install_{{ item.value.sap_system_id|lower}}.log
+  args:
+    chdir: "{{ installroot }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/"
+    creates: "/usr/sap/{{ item.value.sap_system_id|upper }}/HDB{{ item.value.sap_instance }}/exe/hdbdaemon"
+  with_dict: "{{ instances }}"
+
+...

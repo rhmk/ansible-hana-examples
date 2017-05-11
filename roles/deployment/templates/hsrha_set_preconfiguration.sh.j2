@@ -1,0 +1,16 @@
+#!/bin/bash
+# Source DOC-1001643.pdf -> Markus Koch
+#
+/usr/sap/{{ sapsystemname }}/HDB{{ sapsystemnummer }}/exe/hdbuserstore SET SAPHANA{{ sapsystemname }}SR localhost:30015 rhelhasync {{ hsrha_rhelhasync }} 
+
+# http://expertisenpuru.com/crm_attribute-usrsapecchdb00exelibxml2-so-2-version-libxml2_2-9-0-not-found-required-by-usrlib64libxslt-so-1/
+unlink /usr/sap/{{ sapsystemname }}/HDB{{ sapsystemnummer }}/exe/libxml2.so.2
+ln -s /usr/lib64/libxml2.so.2.9.0 /usr/sap/{{ sapsystemname }}/HDB{{ sapsystemnummer }}/exe/libxml2.so.2
+
+
+cat << EOF > /etc/facter/facts.d/hsrha{{ sapsystemname_small }}1.sh
+#!/bin/bash
+echo "hsrha1=yes"
+EOF
+chmod 755 /etc/facter/facts.d/hsrha{{ sapsystemname_small }}1.sh
+

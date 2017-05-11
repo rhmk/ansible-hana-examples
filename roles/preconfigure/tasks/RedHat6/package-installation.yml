@@ -1,0 +1,62 @@
+---
+
+- name: install required packages
+  yum: state=latest name={{ item }}
+  with_items:
+    - xfsprogs
+    - ntp
+    - ntpdate
+    - gtk2
+    - libicu
+    - xulrunner
+    - sudo
+    - tcsh
+    - libssh2
+    - expect
+    - cairo
+    - graphviz
+    - iptraf
+    - krb5-workstation
+    - nfs-utils
+    - lm_sensors
+    - rsyslog
+    - compat-sap-c++
+    - openssl098e
+    - openssl
+    - PackageKit-gtk-module
+    - libcanberra-gtk2
+    - libtool-ltdl
+    - xauth
+    - compat-libstdc++-33
+    - numactl
+    - icedtea-web
+    - tuned-profiles-sap-hana
+    - tuned
+    - yum-utils
+    - yum-plugin-security
+    - libselinux-python
+    - parted
+
+- name: base packages
+  yum: state=latest name=@base
+
+- name: required package groups
+  yum: state=present name=@{{ item }}
+  with_items:
+    - large-systems
+    - network-file-system-client
+    - performance
+    - compat-librariess
+
+- name: update system with the latest security fixes
+  shell: yum -y update --security warn=no
+  
+- name: Check for unrar
+  shell: which unrar
+  register: unrar_available
+
+- name: install rar for unpacking HANA
+  yum: state=present name=http://apt.sw.be/redhat/el6/en/x86_64/rpmforge/RPMS/unrar-4.2.3-1.el6.rf.x86_64.rpm
+  when: unrar_available.rc == 1
+
+

@@ -1,0 +1,31 @@
+---
+
+# TODO: This is for the default interface, but should be more flexible
+#
+
+
+# Commented by Thomas Bludau (20170508)
+# Longest thing in our discussions. 
+# Best thing is only to check if DNS is working.
+# Most this is added or managed by customer himself.
+# Btw: With more adapters ansible_default_ipv4.address have no values by
+# my installation?!?!
+#- name: Set correct entry in /etc/hosts
+#  lineinfile: 
+#    dest: /etc/hosts
+#    line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}" 
+ 
+- name: make sure the short hostname is returned with "hostname" command
+  shell: |
+     if [ $(hostname -s) == $(hostname) -a $(hostname -f) == $(hostname).$(hostname -d) ]; then
+        rc=0
+     else
+        hostnamectl set-hostname $(hostname -s)
+        rc=1
+     fi
+     exit $rc
+  register: change_hostname
+  changed_when: change_hostname.rc == 1
+  failed_when: change_hostname.rc >= 2 
+
+...

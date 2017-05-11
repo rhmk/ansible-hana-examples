@@ -1,0 +1,28 @@
+---
+
+# TODO: This is for the default interface, but should be more flexible
+# NOTE: This part is untested please doublecheck
+#
+- name: Set correct entry in /etc/hosts
+  lineinfile: 
+    dest: /etc/hosts
+    line: "{{ ansible_default_ipv4.address }} {{ ansible_fqdn }} {{ ansible_hostname }}" 
+ 
+- name: make sure the short hostname is returned with "hostname" command
+  shell: |
+     if [ $(hostname -s) == $(hostname) ] && [ $(hostname -f) == $(hostname).$(hostname -d) ]; then
+        rc=0
+     else
+        hostname $(hostname -s)
+        rc=1
+     fi
+     exit $rc
+  register: change_hostname
+  changed_when: change_hostname.rc == 1
+  failed_when: change_hostname.rc >= 2 
+
+- name: make short hostname reboot resistant
+  lineinfile:
+    dest: /etc/sysconfig/network
+    line: "hostname={{ ansible_hostname }}"
+...

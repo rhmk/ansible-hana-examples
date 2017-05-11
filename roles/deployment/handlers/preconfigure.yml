@@ -1,0 +1,7 @@
+---
+- name: Restart HostAgent
+  shell: /usr/sap/hostctrl/exe/saphostexec -restart
+  listen: "Execute HANA Host Agent SSL Configuration"
+
+
+...
