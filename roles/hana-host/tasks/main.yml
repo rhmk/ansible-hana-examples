@@ -4,6 +4,9 @@
   debug:
     verbosity: "{{ debuglevel }}"
 
+- name: set default gateway
+  shell: route add default gw 192.168.0.2
+
 - include: ./system-registration-part1.yml
   when: check_repos
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-registration.yml' }}"
