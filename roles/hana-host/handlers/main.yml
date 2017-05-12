@@ -12,7 +12,4 @@
 - name: restart systemd-logind
   service: name=systemd-logind state=restarted
 
-- include: ./preconfigure.yml
-  tags:
-    - hana-install
 ...

@@ -51,9 +51,12 @@
     password: "{{ item.value.pw_user_sidadm|password_hash('sha512') }}"
   with_dict: "{{ instances }}"
 
-- name: copy global.ini
-  copy: src=global.ini dest=/hana/shared/{{ item.value.hana_sid|upper }}/global.ini
-  with_dict: "{{ instances }}"
+# 20170513 Thomas Bludau
+# Very complicated part. Could be different on every enviornment.
+
+#- name: copy global.ini
+#  copy: src=global.ini dest=/hana/shared/{{ item.value.hana_sid|upper }}/global.ini
+#  with_dict: "{{ instances }}"
 
 # Only Start when:
 # Hostname Resolution is fine!

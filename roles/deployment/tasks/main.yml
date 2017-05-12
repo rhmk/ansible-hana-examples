@@ -1,8 +1,12 @@
 ---
 
-- name: Enable Debugging
-  debug:
-    verbosity: "{{ debuglevel }}"
+# 20160513 Thomas Bludau
+# Did not work when executed alone
+# commented
+
+#- name: Enable Debugging
+#  debug:
+#    verbosity: "{{ debuglevel }}"
 
 # Changed: Thomas Bludau 20170508
 # Changed on every Customer Side

@@ -32,13 +32,4 @@
     - hana-install
     - media-check
 
-- include: ./preconfigure.yml
-  tags:
-    - hana-install
-
-# Schleife über mehrere Instanzen
-- include: ./deployment.yml
-  tags:
-    - hana-install
-
 ...
