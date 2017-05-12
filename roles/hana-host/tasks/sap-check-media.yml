@@ -32,7 +32,7 @@
 
 - name: mount installdir
   mount:
-      src: {{ install_nfs }} 
+      src: "{{ install_nfs }}"
       name: /tmp/install
       fstype: nfs
       state: mounted
@@ -43,7 +43,7 @@
   
 - name: mount installdir
   mount:
-      src: {{ install_nfs }} 
+      src: "{{ install_nfs }}"
       name: /tmp/install
       fstype: nfs
       state: unmounted
