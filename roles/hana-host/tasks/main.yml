@@ -6,6 +6,11 @@
 
 - include: ./system-registration-part1.yml
   when: check_repos
+  tags:
+    - osprep
+    - system-registration
+
+
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-registration.yml' }}"
   when: check_repos
   tags:
