@@ -12,7 +12,7 @@
     INSTDIR='{{ installroot }}'
     VERSION='{{ installversion }}'
     MOUNTP='{{ install_nfs }}'
-    if [ -f "${INSTDIR}/${VERSION}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm" ]; then
+    if [ -f "${INSTDIR}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm" ]; then
        rc=0
     else
        TDIR=$(mktemp -d)

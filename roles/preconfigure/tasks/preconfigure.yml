@@ -1,5 +1,9 @@
 ---
 
+- name: "Create Test-File"
+  command: touch /tmp/thomas-test.txt
+  when: deployment_instance is defined
+
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/package-installation.yml' }}"
   tags:
     - osprep

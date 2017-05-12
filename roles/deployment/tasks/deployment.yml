@@ -70,5 +70,6 @@
     chdir: "{{ installroot }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/"
     creates: "/usr/sap/{{ item.value.sap_system_id|upper }}/HDB{{ item.value.sap_instance }}/exe/hdbdaemon"
   with_dict: "{{ instances }}"
+  when: deployment_instance is defined
 
 ...
