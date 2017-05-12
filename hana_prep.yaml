@@ -1,11 +1,5 @@
-#!/usr/bin/env ansible-playbook
-
 ---
-- hosts: hana-servers
-
-  remote_user: root
+- hosts: all
 
   roles:
     - hana-host
-
-...
