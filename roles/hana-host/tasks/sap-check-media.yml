@@ -30,37 +30,23 @@
     owner: root
     group: root
 
+- name: mount installdir
+  mount:
+      src: {{ install_nfs }} 
+      name: /tmp/install
+      fstype: nfs
+      state: mounted
+  when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
 
-- name: Make Installdir available at '{{ installroot }}'
-  shell: |
-    INSTDIR='{{ installroot }}'
-    VERSION='{{ installversion }}'
-    MOUNTP='{{ install_nfs }}'
-    if [ -f "${INSTDIR}/${VERSION}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm" ]; then
-       rc=0
-    else
-       TDIR=$(mktemp -d)
-       trap "{ cd / ; rm -rf $TDIR; exit 255; }" SIGINT
-       mount -t nfs $MOUNTP $TDIR
-       if [ -d "${TDIR}/${VERSION}" ]; then 
-          umount "$TDIR"
-          mount -t nfs $MOUNTP $INSTDIR
-          rc=1
-       else
-          if [ -f "${TDIR}/${VERSION}_part1.exe" ]; then 
-             ( cd $INSTDIR; unrar x "${TDIR}/${VERSION}_part1.exe" )
-             umount ${TDIR}
-             rc=1
-          else
-             rc=2
-          fi
-       fi 
-    fi
-    rm -rf $TDIR
-    exit $rc
-  register: unpack_hana 
-  changed_when: unpack_hana.rc == 1
-  failed_when: unpack_hana.rc >= 2 
+- name: extract installer
+  shell: cd {{ installroot }} && unrar x "/tmp/install/{{ installversion }}_part1.exe"
+  
+- name: mount installdir
+  mount:
+      src: {{ install_nfs }} 
+      name: /tmp/install
+      fstype: nfs
+      state: unmounted
   when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
 
 - name: Get HANA Version Information
