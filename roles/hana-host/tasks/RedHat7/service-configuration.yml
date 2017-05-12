@@ -37,7 +37,6 @@
 
 - name: enable tuned
   service: name=tuned state=started enabled=yes
-  ignore_errors: True
 
 - name: disable temp file handling for SAP applications
   copy: src=tmpfilesd-sap.conf dest=/etc/tmpfiles.d/sap.conf

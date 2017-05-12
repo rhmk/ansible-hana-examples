@@ -30,6 +30,9 @@
     owner: root
     group: root
 
+- name: install NFS packages for mounting
+  yum: state=present name=nfs-utils
+  
 - name: mount installdir
   mount:
       src: "{{ install_nfs }}"
