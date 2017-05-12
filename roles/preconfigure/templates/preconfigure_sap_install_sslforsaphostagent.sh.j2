@@ -5,7 +5,7 @@
 
 #MYHOSTNAME=$(echo $HOSTNAME | awk -F"." {'print $1'})
 MYHOSTNAME={{ hostname }}
-SSLPASSWORD={{ sap_hostagent_sslpassword }}
+SSLPASSWORD={{ hana_pw_hostagent_ssl }}
 
 export LD_LIBRARY_PATH=/usr/sap/hostctrl/exe/
 export SECUDIR=/usr/sap/hostctrl/exe/sec

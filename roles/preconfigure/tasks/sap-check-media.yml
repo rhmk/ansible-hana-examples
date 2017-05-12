@@ -1,15 +1,15 @@
 ---
 
 - file:
-    name: "{{  installroot }}"
+    name: "{{  hana_installdir }}"
     state: directory
     owner: root
     group: root
 
 
-- name: Make Installdir available at '{{ installroot }}'
+- name: Make Installdir available at '{{ hana_installdir }}'
   shell: |
-    INSTDIR='{{ installroot }}'
+    INSTDIR='{{ hana_installdir }}'
     VERSION='{{ installversion }}'
     MOUNTP='{{ install_nfs }}'
     if [ -f "${INSTDIR}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm" ]; then
@@ -40,13 +40,13 @@
   when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
 
 # Changed Thomas Bludau (20170508)
-# Install directory could named completly different by customer
-# Use only installroot for installation
-# Otherwise you got problems while integrating on customers side ...
+# Install directory could named completly different by hsr_name
+# Use only hana_installdir for installation
+# Otherwise you got problems while integrating on hsr_names side ...
 
 - name: Get HANA Version Information
   shell: |
-    INSTDIR='{{ installroot }}'
+    INSTDIR='{{ hana_installdir }}'
     awk ' ( $1 == "fullversion:" ) { print $2}'  ${INSTDIR}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/server/manifest
   register: hanaversion
 

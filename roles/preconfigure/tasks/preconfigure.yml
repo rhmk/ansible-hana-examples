@@ -30,7 +30,7 @@
     name: sapadm
     uid: "{{ id_user_sapadm }}"
     group: sapsys
-    password: "{{ pw_sapadm|password_hash('sha512') }}"
+    password: "{{ pw_user_sapadm_clear|password_hash('sha512') }}"
 
 
 # Installation of SAP HANA Host Agent

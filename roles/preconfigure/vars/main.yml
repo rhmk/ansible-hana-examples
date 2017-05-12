@@ -48,10 +48,10 @@ logvols:
     pvs: /dev/vdb1
 
 # HANA Parameters
-#customer: demoinstall
+#hsr_name: demoinstall
 
 # directory, where Hana install binaries are unpacked
-#installroot: /install
+#hana_installdir: /install
 #installversion: "51051151"
 
 # User and GroupIDs to use for sap (Default: undef)
@@ -59,18 +59,18 @@ logvols:
 #id_user_sidadm: "30210"
 #id_group_shm: "30220"
 #id_group_sapsys: "30200"
-#pw_sapadm: "Adm12356"
-#pw_sidadm: "Adm12356"
-#pw_systemuser: "System123"
+#pw_user_sapadm_clear: "Adm12356"
+#pw_user_sidadm: "Adm12356"
+#hana_pw_system_user_clear: "System123"
 #
-#sap_system_id: HXE
-#sap_instance: 90
+#hana_sid: HXE
+#hana_instance_number: 90
 #
-#sap_hana_system_usage: custom
+#hana_system_usage: custom
 #
-sap_hana_components: "client,server"
+hana_components: "client,server"
 #
-sap_hana_system_type: "Master"
+hana_system_type: "Master"
 
 ...
     

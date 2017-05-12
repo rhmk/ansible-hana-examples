@@ -3,7 +3,7 @@
 TEMP=$(mktemp -d)
 
 # Extract Hostagent
-cp -rp {{ sapinstalldir }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/server/HOSTAGENT.TGZ $TEMP/
+cp -rp {{ hana_installdir }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/server/HOSTAGENT.TGZ $TEMP/
 cd $TEMP
 tar -xzvf HOSTAGENT.TGZ
 

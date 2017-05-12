@@ -7,7 +7,7 @@
 # Commented by Thomas Bludau (20170508)
 # Longest thing in our discussions. 
 # Best thing is only to check if DNS is working.
-# Most this is added or managed by customer himself.
+# Most this is added or managed by hsr_name himself.
 # Btw: With more adapters ansible_default_ipv4.address have no values by
 # my installation?!?!
 #- name: Set correct entry in /etc/hosts

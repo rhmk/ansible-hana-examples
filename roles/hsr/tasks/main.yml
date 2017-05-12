@@ -22,7 +22,7 @@
 - name: Crate File for Scale-Out Enviornments
   template:
     src: hsr_create_backup.sh.j2
-    dest: /usr/local/bin/hsr_create_backup_{{ item.value.sapsystemname_small }}.sh
+    dest: /usr/local/bin/hsr_create_backup_{{ item.value.hana_sid_small }}.sh
     mode: 0755
   with_dict: "{{ hsr }}"
 
@@ -34,7 +34,7 @@
 - name: Deploy register Configuration-Scripts  
   template:
     src: hsr_sr_register.sh.j2 
-    dest: /usr/local/bin/hsr_sr_register_{{ item.value.sapsystemname_small }}.sh
+    dest: /usr/local/bin/hsr_sr_register_{{ item.value.hana_sid_small }}.sh
     mode: 0755
   with_dict: "{{ hsr }}"
 
@@ -42,17 +42,17 @@
 - name: Deploy enable Configuration-Scripts
   template:
     src: hsr_sr_enable.sh.j2
-    dest: /usr/local/bin/hsr_sr_enable_{{ item.value.sapsystemname_small }}.sh
+    dest: /usr/local/bin/hsr_sr_enable_{{ item.value.hana_sid_small }}.sh
     mode: 0755
   with_dict: "{{ hsr }}"
 
 # Only execute once on one install host
 
 - name: enable backup configuration
-  shell: ./hsr_create_backup_{{ item.value.sapsystemname_small }}.sh
+  shell: ./hsr_create_backup_{{ item.value.hana_sid_small }}.sh
   args:
     chdir: "/usr/local/bin/"
-    creates: /etc/ansible/facts.d/hsr_backup_configured_{{ item.value.sapsystemname_small }}.fact
+    creates: /etc/ansible/facts.d/hsr_backup_configured_{{ item.value.hana_sid_small }}.fact
   with_dict: "{{ hsr }}"
   when: 
     - hsr_deploy_type is defined
@@ -61,7 +61,7 @@
 
 
 - name: execute enable system-replication
-  shell: /usr/bin/su - {{ item.value.sapsystemname_small }}adm -c "hdbnsutil -sr_enable --name={{ item.value.customer }}"
+  shell: /usr/bin/su - {{ item.value.hana_sid_small }}adm -c "hdbnsutil -sr_enable --name={{ item.value.hsr_name }}"
   with_dict: "{{ hsr }}"
   when: 
     - hsr_deploy_type is defined
@@ -69,7 +69,7 @@
 #
 ## Only execute once on one register host
 - name: execute register system-replication
-  shell: /usr/bin/su - {{ item.value.sapsystemname_small }}adm -c "/usr/local/bin/hsr_sr_register_{{ item.value.sapsystemname_small }}.sh"
+  shell: /usr/bin/su - {{ item.value.hana_sid_small }}adm -c "/usr/local/bin/hsr_sr_register_{{ item.value.hana_sid_small }}.sh"
   args:
     chdir: "/usr/local/bin"
   with_dict: "{{ hsr }}"

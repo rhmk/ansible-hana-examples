@@ -2,22 +2,22 @@
 
 <% if hsr_hostname_resolution_ip.kind_of?(Array) - }}
 
-/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.sapsystemnummer }} -function StopSystem
+/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }} -function StopSystem
 
 # Check if System is active
-while [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.sapsystemnummer }} -function GetSystemInstanceList | grep -E \"(GREEN|YELLOW)\"`" ]; do
+while [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }} -function GetSystemInstanceList | grep -E \"(GREEN|YELLOW)\"`" ]; do
  sleep 1;
 done
 
 echo test
 # Check if system failed
-if [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.sapsystemnummer }} -function GetSystemInstanceList | grep RED`" ]; then
+if [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }} -function GetSystemInstanceList | grep RED`" ]; then
  echo "HANA Status RED"
  exit 3;
 fi
 
 
-cat << EOF >> /hana/shared/{{  item.value.sapsystemname  }}/global/hdb/custom/config/global.ini
+cat << EOF >> /hana/shared/{{  item.value.hana_sid  }}/global/hdb/custom/config/global.ini
 
 [system_replication_hostname_resolution]
 <%- (1..(hsr_hostname_resolution_ip.length)).each do |id| - }}
@@ -29,16 +29,16 @@ listeninterface = .internal
 
 EOF
 
-/usr/sap/hostctrl/exe/sapcontrol -nr {{ sapsystemnummer }} -function StartSystem
+/usr/sap/hostctrl/exe/sapcontrol -nr {{ hana_instance_number }} -function StartSystem
 
 # Check if System is System is starting 
-while [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.sapsystemnummer }} -function GetSystemInstanceList | grep -E \"(GRAY|YELLOW|RED)\"`" ]; do
+while [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }} -function GetSystemInstanceList | grep -E \"(GRAY|YELLOW|RED)\"`" ]; do
  sleep 1;
 done
 
 echo test
 # Check if system failed
-if [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.sapsystemnummer }} -function GetSystemInstanceList | grep RED`" ]; then
+if [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }} -function GetSystemInstanceList | grep RED`" ]; then
  echo "HANA Status RED"
  exit 3;
 fi
