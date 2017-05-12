@@ -60,9 +60,7 @@
 - name: create compatibility links
   file: src=/usr/lib64/{{ item.src }} dest=/usr/lib64/{{ item.dest }} state=link
   with_items:
-    - { src: 'libssl.so.0.9.8e', dest: 'libssl.so.0.9.8' }
     - { src: 'libssl.so.1.0.1e', dest: 'libssl.so.1.0.1' }
-    - { src: 'libcrypto.so.0.9.8e', dest: 'libcrypto.so.0.9.8' }
     - { src: 'libcrypto.so.1.0.1e', dest: 'libcrypto.so.1.0.1' }
 
 ...

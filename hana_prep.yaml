@@ -1,7 +1,4 @@
-#!/usr/bin/env ansible-playbook
-
 ---
-
 - hosts: bludau-1-scaleout1
   remote_user: root
   roles:
