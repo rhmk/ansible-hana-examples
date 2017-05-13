@@ -8,22 +8,6 @@ id_group_sapsys: "30200"
 pw_user_sapadm_clear: "Adm12356"
 
 instances:
-  hxe:
-    id_user_sidadm: "30210"
-    pw_user_sidadm: "Adm12356"
-    hana_pw_system_user_clear: "System123"
-    hana_components: "client,server"
-    hana_system_type: "Master"
-    id_group_shm: "30220"
-    hana_sid_small: hxe 
-    hana_addhosts: dc1system02 
-    hana_instance_hostname: dc1system01
-    addhosts: dc1system01
-    hana_sid: HXE 
-    hana_instance_number: 90
-    hana_system_usage: custom
-    hana_hana_pw_system_user_clear_clear: System123
-
   a01:
     id_user_sidadm: "20210"
     pw_user_sidadm: "Adm12356"
@@ -39,20 +23,8 @@ instances:
     hana_instance_number: 91
     hana_system_usage: custom
     hana_hana_pw_system_user_clear_clear: System123
+     
 hsr:
-  hxe:
-    hana_instance_hostname: dc2system01
-    hana_sid: HXE
-    hana_sid_small: hxe
-    hana_instance_number: 90
-    hana_pw_system_user_clear: System123
-    hsr_name: bludau-1-scaleout1-hxe
-    hsr_type: PRIMARY 
-    hsr_configure: yes
-    hsr_type_remote_host: dc1system02
-    hsr_operation_mode: logreplay
-    hsr_replicationmode: sync
-    hsr_backup_directory: /hana/shared/HXE/HDB90/backup/data
   a01:
     hana_instance_hostname: dc1system01
     hana_sid: A01
