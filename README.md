@@ -1,4 +1,6 @@
-# ansible-hana-sysprep
+# ansible-hana-sysprep 
+
+## Stable version 0.1
 
 
 This playbook can be used with Command Line (ansible-playbook), Ansible Tower and CloudForms 4.5 and later
@@ -6,8 +8,6 @@ This playbook can be used with Command Line (ansible-playbook), Ansible Tower an
 This git repository will have several branches as follows:
 - master:  current ongoing development
 - stable:  fully tested releases incl. documentation
-
-You are now working on stable branch version 0.1
 
 Follow the documentation on https://www.ansible.com to setup your ansible environment or ansible-tower server. 
 Follow the instructions on https://access.redhat.com/documentation/en/red-hat-cloudforms/ for CloudForms
