@@ -1,5 +1,8 @@
 # ansible-hana-sysprep
 
+## This is the Developer Branch 
+### the current commit contained a couple of fundamental changes, so please switch to stable branch, if you have problems with these changes
+
 
 This playbook can be used with Command Line (ansible-playbook), Ansible Tower and CloudForms 4.5 and later
 
