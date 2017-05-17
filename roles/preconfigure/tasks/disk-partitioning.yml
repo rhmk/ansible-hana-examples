@@ -1,0 +1,61 @@
+---
+
+- name: install gdisk for sgdisk
+  package: name=gdisk state=present
+  tags:
+  - disk_init
+
+- name: create disk partitions 
+  shell: |
+   if pvdisplay -C '{{ item.key }}'1 ; then
+       echo '{{ item.key }}' in use
+       exit 0
+   else
+       sgdisk --zap {{ item.key }}
+       parted -s -a optimal '{{ item.key }}' mklabel msdos && parted -s -a optimal -- '{{ item.key }}' unit compact mkpart primary ext3 "1" "-1" &&  parted -s -a optimal -- '{{ item.key }}' set 1 lvm on
+      /sbin/pvcreate '{{ item.key }}'1
+      exit 90
+   fi
+  with_dict: "{{ disks }}"
+  register: pvcreate_result
+  changed_when: pvcreate_result.rc == 90
+  failed_when: pvcreate_result.rc > 0 and pvcreate_result.rc != 90
+  tags:
+    - disk_init
+
+- name: create volume groups on it
+  lvg: state=present vg="{{ item.value }}" pvs="{{ item.key }}1"
+  with_dict: "{{ disks }}"
+  tags:
+  - disk_init
+
+- name: create logical volumes 
+  lvol: state=present vg={{ item.value.vol }} lv=lv_{{ item.key }} size={{ item.value.size }}
+  with_dict: "{{ logvols }}"
+  tags:
+    - disk_init
+
+- name: create filesystems
+  filesystem:
+    dev:  /dev/{{ item.value.vol}}/lv_{{ item.key }}
+    fstype: xfs
+    force: no
+    opts: -f -b size=4096 -d su=64k,sw=2
+  with_dict: "{{ logvols }}"
+  ignore_errors: True
+  tags:
+    - disk_init
+
+- name: mount and make fstab entries
+  mount:
+    name: "{{ item.value.mountpoint }}"
+    fstype: xfs
+    opts: defaults
+    passno: 4
+    src: "/dev/{{ item.value.vol }}/lv_{{ item.key }}"
+    state: mounted
+  with_dict: "{{ logvols }}"
+  tags:
+    - disk_init
+
+...

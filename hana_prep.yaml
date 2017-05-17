@@ -1,5 +1,18 @@
 ---
-- hosts: all
-
+- hosts: bludau-1-scaleout1
+  remote_user: root
   roles:
     - hana-host
+    - preconfigure 
+    - deployment
+    - hsr
+
+- hosts: bludau-1-scaleout2
+  remote_user: root
+  roles:
+    - hana-host
+    - preconfigure
+    - deployment
+    - hsr
+
+...

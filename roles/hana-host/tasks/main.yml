@@ -4,6 +4,14 @@
   debug:
     verbosity: "{{ debuglevel }}"
 
+# Thomas Bludau 20170508
+# Changed on every Customer Side
+# It is necessary that you have a fix repository, 
+# otherwhise added systems could have problems
+# Requirement is that the systems are Registed to 
+# existing Repository.
+
+
 - include: ./system-registration-part1.yml
   when: check_repos
   tags:
@@ -46,9 +54,5 @@
   tags:
     - hana-install
     - media-check
-
-- include: ./sap-hana-install.yml
-  tags:
-    - hana-install
 
 ...

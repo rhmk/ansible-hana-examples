@@ -1,0 +1,36 @@
+---
+# Global Default variables
+# Adapt to your default settings
+
+# Want extensive debugging
+debuglevel: 3
+#
+#  System Registration. 
+# assuming system is properly configured, just want to add required channels
+
+# HANA Parameters
+#hsr_name: demoinstall
+
+# directory, where Hana install binaries are unpacked
+#hana_installdir: /install
+
+# User and GroupIDs to use for sap (Default: undef)
+#id_user_sapadm: "30200"
+#id_user_sidadm: "30210"
+#id_group_shm: "30220"
+#id_group_sapsys: "30200"
+#pw_user_sapadm_clear: "Adm12356"
+#pw_user_sidadm: "Adm12356"
+#hana_pw_system_user_clear: "System123"
+#
+#hana_sid: HXE
+#hana_instance_number: 90
+#
+#hana_system_usage: custom
+#
+hana_components: "client,server"
+#
+hana_system_type: "Master"
+
+...
+    

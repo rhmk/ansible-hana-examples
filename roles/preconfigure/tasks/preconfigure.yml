@@ -1,0 +1,77 @@
+---
+
+- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/package-installation.yml' }}"
+  tags:
+    - osprep
+    - packages
+- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/service-configuration.yml' }}"
+  tags:
+    - osprep
+    - services
+- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-tuning.yml' }}"
+  tags:
+    - osprep
+    - system-tuning
+
+- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/check-hostname-dns.yml' }}"
+  tags:
+    - osprep
+    - set-hostname
+
+- name: create sapsys group
+  group: name=sapsys gid={{ id_group_sapsys }}
+
+- name: create sapadm user
+  user:
+    name: sapadm
+    uid: "{{ id_user_sapadm }}"
+    group: sapsys
+    password: "{{ pw_user_sapadm_clear|password_hash('sha512') }}"
+
+
+# Installation of SAP HANA Host Agent
+# Need this for ScaleOut Enviornments
+# Did not work with ssh under SLES12, RHEL6, RHEL7
+# https://access.redhat.com/solutions/1370033
+
+- name: Installation File SAP HANA Host Agent
+  template: 
+    src: preconfigure_sap_install_saphostagent.sh.j2 
+    dest: /usr/local/bin/preconfigure_sap_install_saphostagent.sh
+    mode: 0755
+
+- name: Install SAP HANA Host Agent
+  shell: /usr/local/bin/preconfigure_sap_install_saphostagent.sh
+  args:
+    creates: /usr/sap/hostctrl/exe/saphostexec
+
+# Setup sap hana Hostagent SSL
+# http://help.sap.com/saphelp_nw73ehp1/helpdata/en/8d/12f7b9244b44219bd14d619d3a2123/content.htm
+# Based on RHEL Documentation https://access.redhat.com/solutions/1370033
+- name: Create directory for SAP HANA Hostagent SSL Configuration
+  file:
+    path: /usr/sap/hostctrl/exe/sec
+    state: directory
+    mode: 0755
+    owner: sapadm
+    group: sapsys
+
+- name: Deployfile for HANA Host Agent SSL Configuration
+  template: 
+    src: preconfigure_sap_install_sslforsaphostagent.sh.j2
+    dest: /usr/local/bin/preconfigure_sap_install_sslforsaphostagent.sh
+    mode: 0755
+ 
+- name: Execute HANA Host Agent SSL Configuration
+  shell: /usr/local/bin/preconfigure_sap_install_sslforsaphostagent.sh
+  notify: "Restart HostAgent"
+  args:
+    creates: /usr/sap/hostctrl/exe/sec/SAPSSLS.pse 
+
+- name: Change user for SAPSSLS.pse file for SAP Host Agent 
+  file:
+    path: /usr/sap/hostctrl/exe/sec/SAPSSLS.pse
+    state: file
+    owner: sapadm
+    group: sapsys
+...

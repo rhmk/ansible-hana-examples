@@ -1,0 +1,27 @@
+#!/bin/bash
+if [ "`whoami`" == "root" ]; then
+ echo "Do not execute as root"
+ exit 2
+fi
+
+# Stop System
+/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }} -function StopSystem ALL
+
+# Check if System is active
+while [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }} -function GetSystemInstanceList | grep -E \"(GREEN|YELLOW)\"`" ]; do
+ sleep 1;
+done
+
+echo test
+# Check if system failed
+if [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }} -function GetSystemInstanceList | grep RED`" ]; then
+ echo "HANA Status RED"
+ exit 3;
+fi
+
+
+# Configure System-Replication
+hdbnsutil -sr_register --name={{ item.value.hsr_name }} --replicationMode=syncmem --operationMode={{ item.value.hsr_operation_mode }} --remoteHost={{ item.value.hsr_type_remote_host }} --remoteInstance={{ item.value.hana_instance_number }} --force_full_replica
+
+ 
+

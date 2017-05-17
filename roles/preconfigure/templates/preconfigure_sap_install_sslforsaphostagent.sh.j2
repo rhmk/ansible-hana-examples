@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Information from:
+# http://help.sap.com/saphelp_nw73ehp1/helpdata/en/8d/12f7b9244b44219bd14d619d3a2123/content.htm
+
+#MYHOSTNAME=$(echo $HOSTNAME | awk -F"." {'print $1'})
+MYHOSTNAME={{ hostname }}
+SSLPASSWORD={{ hana_pw_hostagent_ssl }}
+
+export LD_LIBRARY_PATH=/usr/sap/hostctrl/exe/
+export SECUDIR=/usr/sap/hostctrl/exe/sec
+
+cd /usr/sap/hostctrl/exe
+
+/usr/sap/hostctrl/exe/sapgenpse gen_pse -p SAPSSLS.pse -x $SSLPASSWORD -r /tmp/${MYHOSTNAME}-csr.p10 "CN=$MYHOSTNAME"
+
+/usr/sap/hostctrl/exe/sapgenpse seclogin -p SAPSSLS.pse -x $SSLPASSWORD -O sapadm
+
+#/usr/sap/hostctrl/exe/saphostexec -restart
