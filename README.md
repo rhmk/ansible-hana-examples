@@ -38,7 +38,7 @@ Receiving objects: 100% (181/181), 146.76 KiB, done.
 Resolving deltas: 100% (64/64), done.
 </pre>
 
-### Variable Configuration
+### Variable Configuration  *** OUTDATED in this verison ***
 
 The following variables can/need to be set to configure the execution of the script. They can be set globally or locally.
 
