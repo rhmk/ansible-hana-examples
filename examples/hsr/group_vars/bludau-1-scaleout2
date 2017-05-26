@@ -20,7 +20,7 @@ instances:
     hana_instance_hostname: dc2system01 
     hana_sid: A01
     hana_instance_number: 91
-    hana_hana_pw_system_user_clear_clear: System123
+    hana_pw_system_user_clear: System123
     hana_addhosts: dc2system02
 
 hsr:
