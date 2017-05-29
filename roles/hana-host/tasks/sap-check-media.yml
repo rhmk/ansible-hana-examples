@@ -26,7 +26,6 @@
 
 - file:
     name: "{{  hana_installdir }}"
->>>>>>> upstream/master
     state: directory
     owner: root
     group: root
@@ -34,11 +33,40 @@
 - name: install NFS packages for mounting
   yum: state=present name=nfs-utils
 
+- name: install unrar package
+  yum: state=present name={{ unrar_pkg }}
+  when: not( (unrar_pkg is undefined) or (unrar_pkg is none) or (unrar_pkg | trim == '') )
+
+### the following snippet only unpacks the rar-file
+#- name: mount installdir
+#  mount:
+#      src: "{{ install_nfs }}"
+#      name: /tmp/install
+#      fstype: nfs
+#      state: mounted
+#  when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
+#
+#- name: extract installer
+#  shell: unrar x "/tmp/install/{{ installversion }}_part1.exe"
+#  args:
+#    chdir: {{ installroot }}
+#    creates: {{ hana_installdir }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm
+#  
+#- name: unmount installdir
+#  mount:
+#      src: "{{ install_nfs }}"
+#      name: /tmp/install
+#      fstype: nfs
+#      state: unmounted
+#  when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
+#
+
 - name: Make Installdir available at '{{ hana_installdir }}'
   shell: |
     INSTDIR='{{ hana_installdir }}'
     VERSION='{{ installversion }}'
     MOUNTP='{{ install_nfs }}'
+    UNRAR='{{ unrar_cmd }}'
     if [ -f "${INSTDIR}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm" ]; then
        rc=0
     else
@@ -51,7 +79,7 @@
           rc=1
        else
           if [ -f "${TDIR}/${VERSION}_part1.exe" ]; then 
-             ( cd $INSTDIR; unrar x "${TDIR}/${VERSION}_part1.exe" )
+             ( cd $INSTDIR; ${UNRAR} x "${TDIR}/${VERSION}_part1.exe" )
              umount ${TDIR}
              rc=1
           else
@@ -65,6 +93,7 @@
   changed_when: unpack_hana.rc == 1
   failed_when: unpack_hana.rc >= 2 
   when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
+
 
 # Changed Thomas Bludau (20170508)
 # Install directory could named completly different by hsr_name

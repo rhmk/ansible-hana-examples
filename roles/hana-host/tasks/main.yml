@@ -18,12 +18,25 @@
     - osprep
     - system-registration
 
-
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-registration.yml' }}"
   when: check_repos
   tags:
     - osprep
     - system-registration
+
+# Create the installation disks
+- include: ./disk-partitioning.yml
+  when: 
+    - disk_partitioning
+  tags:
+    - osprep
+    - disk_partitioning
+
+# figure out where the installation media is. This snippet can either mount it centrally from NFS or unpack it locally
+- include: ./sap-check-media.yml
+  tags:
+    - hana-install
+    - media-check
 
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/package-installation.yml' }}"
   tags:
@@ -42,17 +55,5 @@
   tags:
     - osprep
     - set-hostname
-
-- include: ./disk-partitioning.yml
-  when: 
-    - disk_partitioning
-  tags:
-    - osprep
-    - disk_partitioning
-
-- include: ./sap-check-media.yml
-  tags:
-    - hana-install
-    - media-check
 
 ...
