@@ -21,6 +21,6 @@ instances:
     hana_sid: HXE 
     hana_instance_number: 90
     hana_system_usage: custom
-    hana_hana_pw_system_user_clear_clear: System123
+    hana_pw_system_user_clear: System123
 ...
 

@@ -98,14 +98,14 @@ logvols:
 # HANA Setup
 #------------
 
-# Gives the name of the customer of the Hana DB
-customer: <string>
+# Gives the name of the hsr_name of the Hana DB
+hsr_name: <string>
 
 # NFS Server mountpoint where install media resides:
 install_nfs: "10.32.97.3:/public/sap-software"
 
 # directory, where Hana install binaries are needed
-installroot: /install
+hana_installdir: /install
 
 # Hana Install version (RAR Archive Number)
 installversion: "51051151"
@@ -117,33 +117,33 @@ id_group_shm:
 id_group_sapsys:
 
 # Initial passwords in clear text
-pw_sapadm:
-pw_sidadm:
-pw_systemuser:
+pw_user_sapadm_clear:
+pw_user_sidadm:
+hana_pw_system_user_clear:
 
 # Optional: List of hosts in a scale out cluster
-scaleouthosts
+hana_addhosts
 
 # Mandatory: SAP SystemID (3 Characters) and Instance Number (2 Numbers)
 # For HANA Express always use HXE and 90(otherwise developer licence gets invalid)
-sap_system_id: HXE
-sap_instance: 90
+hana_sid: HXE
+hana_instance_number: 90
 
 # Optional: Hostname for Hana Installation
 # required for multi-homed settings and cluster environments
-sap_hostname:
+hana_instance_hostname:
 
 # SAP system-usage
 # Please use one of: production, test, development, custom
-sap_hana_system_usage: custom
+hana_system_usage: custom
 
 # HANA Components  to be installed
 # possible options depend on HANA version
-sap_hana_components: "clients,server"
+hana_components: "clients,server"
 
 # HANA System Type 
 # defaults to Master in Scale-Up setups, but will be different in scale-out deployments
-sap_hana_system_type: "Master"
+hana_system_type: "Master"
 ```
 
 ## Running the Playbook from commandline

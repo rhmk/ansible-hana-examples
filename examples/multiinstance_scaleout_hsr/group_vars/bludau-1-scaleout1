@@ -1,29 +1,73 @@
----
+----
+# Unrared installation directory from SAP HANA
+# Download from SAP directly.
 hana_installdir: /install/shared/hana_inst/51051151/
+
+# System Hostname
+# Needed for sime internal tests for Scale-Out
+# and SAP Host Agent
 hostname: dc1system01
+# Password for SAP Host Agent
 hana_pw_hostagent_ssl: Ab01%%bA
+
+# System user ID for Linux User sapadm
 id_user_sapadm: "30200"
+# System Group ID for <sid>shm 
+# (Bug, shouldnt be inserted here)
 id_group_shm: "30220"
+
+# System group ID for Linux group sapsys 
 id_group_sapsys: "30200"
+
+# Password for Linux system user sapadm
 pw_user_sapadm_clear: "Adm12356"
 
-instances:
-  hxe:
-    id_user_sidadm: "30210"
-    pw_user_sidadm: "Adm12356"
-    hana_pw_system_user_clear: "System123"
-    hana_components: "client,server"
-    hana_system_type: "Master"
-    id_group_shm: "30220"
-    hana_sid_small: hxe 
-    hana_addhosts: dc1system02 
-    hana_instance_hostname: dc1system01
-    addhosts: dc1system01
-    hana_sid: HXE 
-    hana_instance_number: 90
-    hana_system_usage: custom
-    hana_hana_pw_system_user_clear_clear: System123
 
+# Variables for parallel Instance installation
+# Not multiple container installaton!
+instances:
+# SID for Deployment
+  hxe:
+# System user ID for Linux User <sid>adm
+    id_user_sidadm: "30210"
+# Password for Linux system user <sid>adm
+    pw_user_sidadm: "Adm12356"
+# Password for HANA system Database User
+# From HANA Deployment File (system_user_password):
+# Database User (SYSTEM) Password
+    hana_pw_system_user_clear: "System123"
+# Deployment of Components of HANA (Missing)
+    hana_components: "client,server"
+# Type of System Type (Missing)
+    hana_system_type: "Master"
+# System group ID for Linux group <sid>shm
+    id_group_shm: "30220"
+# SID for Deployment (doubled)
+    hana_sid_small: hxe 
+# Addhosts for Scale-Out Enviornments
+# Hana install config file::
+# Additional Hosts addhosts
+    hana_addhosts: dc1system02 
+# Deployment for individual instance Hostname configuration
+# Could be used when Instance name is another then hostname
+# Advantages: you can easy change your systems and everything works fine
+    hana_instance_hostname: dc1system01
+# Additional Hosts addhosts (doubled should be hana_addhosts)
+    addhosts: dc1system01
+# Upper HANA SID
+    hana_sid: HXE 
+# HANA instance Number
+    hana_instance_number: 90
+# System Usage:
+# Hana install config file:
+# System Usage ( Default: custom; Valid values: production | test | development | custom )
+# system_usage=
+    hana_system_usage: custom
+# Database User (SYSTEM) Password (doubled)
+    hana_pw_system_user_clear: System123
+
+# Same as before when install multiple Instances
+# NOT multiple Container installation!
   a01:
     id_user_sidadm: "20210"
     pw_user_sidadm: "Adm12356"
@@ -38,21 +82,49 @@ instances:
     hana_sid: A01
     hana_instance_number: 91
     hana_system_usage: custom
-    hana_hana_pw_system_user_clear_clear: System123
-hsr:
-  hxe:
-    hana_instance_hostname: dc2system01
-    hana_sid: HXE
-    hana_sid_small: hxe
-    hana_instance_number: 90
     hana_pw_system_user_clear: System123
+
+# When install Hana System Replication
+# Definition for HSR
+# This sould be separatly configured on two sides with two parameter sets
+# The first one is the primary side
+# The second the secondary Side. 
+# Three parameters are different on both sides
+# (hsr_type_remote_host, hsr_name, hana_instance_hostname)
+
+hsr:
+# SID for deployment (not integrated at the moment)
+  hxe:
+# Instance Hostname for Initial Configuration (Only used on configure System)
+    hana_instance_hostname: dc2system01
+# Upper HANA SID
+    hana_sid: HXE
+# Lower HANA SID
+    hana_sid_small: hxe
+# HANA instance Number
+    hana_instance_number: 90
+# System User Password needed for Configuration of HANA System Replication
+    hana_pw_system_user_clear: System123
+# HSR Name used for unique Systemname in HANA System Replication
+# f.e. hdbnsutil -sr_register --name={{ item.value.hsr_name }}
     hsr_name: bludau-1-scaleout1-hxe
+# Old Type for definition Type (PRIMARY, SECONDARY) (unsued)
     hsr_type: PRIMARY 
+# Should HSR be configured (unsued)
     hsr_configure: yes
+# Remote Host for HANA System Replication
+# Should be configured on both Sides
+# prepares a script to change the HSR to another side
+# so it should every time the second side
     hsr_type_remote_host: dc1system02
+# HSR Operation Mode
     hsr_operation_mode: logreplay
+# HSR Replication Mode
     hsr_replicationmode: sync
+# HSR Backup Directory is needed to configure initial HANA System Replication
     hsr_backup_directory: /hana/shared/HXE/HDB90/backup/data
+# this is for more then one installations for SAP HANA Instances
+# and then configured HSR
   a01:
     hana_instance_hostname: dc1system01
     hana_sid: A01
@@ -66,8 +138,4 @@ hsr:
     hsr_operation_mode: logreplay
     hsr_replicationmode: sync
     hsr_backup_directory: /hana/shared/A01/HDB91/backup/data
-
-
-
 ...
-
