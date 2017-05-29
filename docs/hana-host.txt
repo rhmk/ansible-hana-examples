@@ -1,0 +1,15 @@
+
+The hana-host role
+
+the hana-host role is intended to run on a plain RHEL installation immediately after installing a minimal OS image.
+It has the following tasks:
+
+- register RHEL system against Satellite or RHN (tag: system-registration,osprep)
+- install all required packages for the defined HANA version (tag: packages,osprep)
+- configure/disable system services (tag: services,osprep)
+- configure system-tuning (tag:system-tuning,osprep)
+- configure SAP compliant hostname scheme (tag: set-hostname,osprep)
+- configure disk-partitioning and setup (tag: disk_partitioning) (not fully tested, use with caution)
+
+
+Variables used for hana-host-role
