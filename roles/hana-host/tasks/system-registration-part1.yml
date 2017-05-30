@@ -10,6 +10,13 @@
   when: ( subscription_status.stdout != "Subscribed" ) and ( (reg_activation_key is not defined) or (reg_organization_id is not defined) )
   #when: (reg_activation_key is not defined) or (reg_organization_id is not defined) or (reg_sub_name is not defined)
 
+- name: Installing credentials for Satellite 6 server  "{{ satellite_server }}"
+  yum: 
+    name: "{{ 'https://' +  satellite_server +'/pub/katello-ca-consumer-latest.noarch.rpm' }}" 
+    state: present
+    validate_certs: no
+  when: not( (satellite_server is undefined) or (satellite_server is none) or (satellite_server | trim == '') )
+
 - name: ensure system is registered using known activation key
   redhat_subscription:
     activationkey: "{{ reg_activation_key }}"
