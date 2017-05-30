@@ -24,6 +24,7 @@
     owner: root
     group: root
 
+# An dieser Stelle falsch falls noch nicht gemounted
 - file:
     name: "{{  hana_installdir }}"
     state: directory
@@ -38,6 +39,7 @@
   when: not( (unrar_pkg is undefined) or (unrar_pkg is none) or (unrar_pkg | trim == '') )
 
 ### the following snippet only unpacks the rar-file
+### It's not able to discover an already existing unpacked installation tree on NFS
 #- name: mount installdir
 #  mount:
 #      src: "{{ install_nfs }}"
@@ -59,8 +61,10 @@
 #      fstype: nfs
 #      state: unmounted
 #  when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
-#
 
+
+# Needs Rework to be more general
+# It needs to fit diffrent customer environments better
 - name: Make Installdir available at '{{ hana_installdir }}'
   shell: |
     INSTDIR='{{ hana_installdir }}'
@@ -104,6 +108,9 @@
   shell: |
     INSTDIR='{{ hana_installdir }}'
     awk ' ( $1 == "fullversion:" ) { print $2}'  ${INSTDIR}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/server/manifest
-  register: hanaversion
+  register: hana_version
 
+- name: Make HANA Version persistent
+  set_fact: 
+    hana_version: hana_version.stdout
 ...

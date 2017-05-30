@@ -5,13 +5,15 @@
     verbosity: "{{ debuglevel }}"
 
 # Thomas Bludau 20170508
-# Changed on every Customer Side
+# Might be customized  on every Customer Side
 # It is necessary that you have a fix repository, 
 # otherwhise added systems could have problems
 # Requirement is that the systems are Registed to 
 # existing Repository.
 
-
+# If you do not use satellite 6 or RHN you need to define
+# check_repos: false in your variable definition (globally)
+# and make sure that the correct EUS channels for HANA are mounted
 - include: ./system-registration-part1.yml
   when: check_repos
   tags:
@@ -25,6 +27,9 @@
     - system-registration
 
 # Create the installation disks
+# If you want to add disks, or your installation method (kickstart, Satellite, etc.) does not setup the HANA disks correctly, 
+# this should give you the possibility to configure your disks
+# This is not fully tested, so use with caution and test extensively
 - include: ./disk-partitioning.yml
   when: 
     - disk_partitioning
@@ -33,11 +38,16 @@
     - disk_partitioning
 
 # figure out where the installation media is. This snippet can either mount it centrally from NFS or unpack it locally
+# The following snippet will check if your Hana Install setting is correct and fetches the version of HANA to be installed
+# and stores it in hanaversion.
+# It may also temporary mounts the installation path or an NFS server that contains the rar-files from SAP SWDC
+# Required to run
 - include: ./sap-check-media.yml
   tags:
     - hana-install
     - media-check
 
+# These playbooks configure the OS according to SAP Notes
 - include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/package-installation.yml' }}"
   tags:
     - osprep
@@ -56,4 +66,5 @@
     - osprep
     - set-hostname
 
+### Now your system is ready to get HANA installed
 ...
