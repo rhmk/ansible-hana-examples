@@ -14,7 +14,7 @@ install_hostagent=y
 hostname={{ item.value.hana_instance_hostname }}
 
 # Additional Hosts
-addhosts={{ item.value.hana_addhosts }}
+addhosts={{ item.value.hana_addhosts | default('') }}
 
 # Non-standard Shared File System
 checkmnt=

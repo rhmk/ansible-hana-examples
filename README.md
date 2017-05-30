@@ -85,5 +85,7 @@ $ ansible-playbook -vvv  -b -e @examples/var.yaml -l hana-servers hana_prep.yaml
  
 ### TODO ###
 - act depending on HANA versions (different required libraries)
+- tasks in hana-host and preconfigure are currently redundant, cleanup required
+- host/DNS setup is not checked appropriately
 
 
