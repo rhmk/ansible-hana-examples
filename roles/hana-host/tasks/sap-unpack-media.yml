@@ -13,6 +13,12 @@
     owner: root
     group: root
 
+- file:
+    name: "{{ installroot }}"
+    state: directory
+    owner: root
+    group: root
+
 - name: mount installdir
   mount:
       src: "{{ install_nfs }}"
@@ -20,12 +26,13 @@
       fstype: nfs
       state: mounted
 
-- name: extract installer 
+- name: extract HANA install media
   shell: |
-    "{{ unrar_cmd|default(unrar) }}" x /tmp/install/"{{ installversion }}"_part1.exe
+    UNRAR="{{ unrar_cmd | default('unrar') }}"
+    ${UNRAR:-unrar} x "{{ '/tmp/install/' + installversion + '_part1.exe' }}"
   args:
     chdir: "{{ installroot }}"
-    creates: "{{ installroot }}/{{ installversion }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm"
+    creates: "{{ installroot + '/' + installversion + '/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm' }}"
   
 - name: unmount installdir
   mount:

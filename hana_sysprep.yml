@@ -1,7 +1,0 @@
----
-- hosts: all
-  roles:
-    - hana-host
-    - preconfigure 
-    - deployment
-    - hsr
