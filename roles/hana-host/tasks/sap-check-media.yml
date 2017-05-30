@@ -24,80 +24,20 @@
     owner: root
     group: root
 
-# An dieser Stelle falsch falls noch nicht gemounted
+#### if install_nfs and ( unrar_cmd or  unrar_pkg) is set, unpack locally
+- include: sap-unpack-media.yml
+  when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )  and not( (unrar_cmd is undefined) or (unrar_cmd is none) or (unrar_cmd | trim == '') or (unrar_pkg is undefined) or (unrar_pkg is none) or (unrar_pkg | trim == '')  ) 
+
+#### if install_nfs and no unrar* is set mount the installation dir
+- include: sap-unpack-media.yml
+  when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )  and ( (unrar_cmd is undefined) or (unrar_cmd is none) or (unrar_cmd | trim == '') ) and  ( (unrar_pkg is undefined) or (unrar_pkg is none) or (unrar_pkg | trim == '') ) 
+
+#### At this point the hana_installdir must be available ...
 - file:
     name: "{{  hana_installdir }}"
     state: directory
     owner: root
     group: root
-
-- name: install NFS packages for mounting
-  yum: state=present name=nfs-utils
-
-- name: install unrar package
-  yum: state=present name={{ unrar_pkg }}
-  when: not( (unrar_pkg is undefined) or (unrar_pkg is none) or (unrar_pkg | trim == '') )
-
-### the following snippet only unpacks the rar-file
-### It's not able to discover an already existing unpacked installation tree on NFS
-#- name: mount installdir
-#  mount:
-#      src: "{{ install_nfs }}"
-#      name: /tmp/install
-#      fstype: nfs
-#      state: mounted
-#  when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
-#
-#- name: extract installer
-#  shell: unrar x "/tmp/install/{{ installversion }}_part1.exe"
-#  args:
-#    chdir: {{ installroot }}
-#    creates: {{ hana_installdir }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm
-#  
-#- name: unmount installdir
-#  mount:
-#      src: "{{ install_nfs }}"
-#      name: /tmp/install
-#      fstype: nfs
-#      state: unmounted
-#  when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
-
-
-# Needs Rework to be more general
-# It needs to fit diffrent customer environments better
-- name: Make Installdir available at '{{ hana_installdir }}'
-  shell: |
-    INSTDIR='{{ hana_installdir }}'
-    VERSION='{{ installversion }}'
-    MOUNTP='{{ install_nfs }}'
-    UNRAR='{{ unrar_cmd }}'
-    if [ -f "${INSTDIR}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm" ]; then
-       rc=0
-    else
-       TDIR=$(mktemp -d)
-       trap "{ cd / ; rm -rf $TDIR; exit 255; }" SIGINT
-       mount -t nfs $MOUNTP $TDIR
-       if [ -d "${TDIR}/${VERSION}" ]; then 
-          umount "$TDIR"
-          mount -t nfs $MOUNTP $INSTDIR
-          rc=1
-       else
-          if [ -f "${TDIR}/${VERSION}_part1.exe" ]; then 
-             ( cd $INSTDIR; ${UNRAR} x "${TDIR}/${VERSION}_part1.exe" )
-             umount ${TDIR}
-             rc=1
-          else
-             rc=2
-          fi
-       fi 
-    fi
-    rm -rf $TDIR
-    exit $rc
-  register: unpack_hana 
-  changed_when: unpack_hana.rc == 1
-  failed_when: unpack_hana.rc >= 2 
-  when: not( (install_nfs is undefined) or (install_nfs is none) or (install_nfs | trim == '') )
-
 
 # Changed Thomas Bludau (20170508)
 # Install directory could named completly different by hsr_name
@@ -105,9 +45,7 @@
 # Otherwise you got problems while integrating on hsr_names side ...
 
 - name: Get HANA Version Information
-  shell: |
-    INSTDIR='{{ hana_installdir }}'
-    awk ' ( $1 == "fullversion:" ) { print $2}'  ${INSTDIR}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/server/manifest
+  shell:  awk ' ( $1 == "fullversion:" ) { print $2}'  "{{ hana_installdir }}"/DATA_UNITS/HDB_SERVER_LINUX_X86_64/server/manifest
   register: hana_version
 
 - name: Make HANA Version persistent

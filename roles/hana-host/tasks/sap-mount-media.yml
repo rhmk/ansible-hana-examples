@@ -1,0 +1,22 @@
+---
+
+- name: install NFS packages for mounting
+  yum: state=present name=nfs-utils
+
+- file:
+    name: "{{ installroot }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: mount installdir
+  mount:
+      src: "{{ install_nfs }}"
+      name: "{{ installroot }}"
+      fstype: nfs
+      state: mounted
+  register: hana_installdir_mounted
+
+# At the end of the installation the installationdir might be useful to ummount
+# when hana_installdir_mounted has been registered
+...

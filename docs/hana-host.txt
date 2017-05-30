@@ -31,14 +31,48 @@ reg_activation_key: <activation_key>
 reg_organization_id: <org_id>
 
 # Set this variable to the DNS name of your satellite server, If unset the RHN is used for registration (Not implemented yet)
-satellite_server: 
+# If this variable is set, it downloads the certificate package from Satellite 6 and installs it.
+satellite_server: <FQDN>
 
-#If you set force_repo_reset to true it removes all existing repos and readds the necessary correct EUS repositories
-#If set to false it adds all necessary EUS repos to the existing 
+
+# If you set force_repo_reset to true it removes all existing repos and readds the necessary correct EUS repositories
+# If set to false it adds all necessary EUS repos to the existing, without deleting existing ones
+# This is only necessary, if your activation key is not set up properly.
 force_repo_reset: [true|false]
 
 # If you use a different setup of repositories and do not use Satellite or RHN set check_repos to false and make sure you have the right repositories configured to your system
 check_repos: true
+
+
+### Configuration for SAP-Media-Check
+### ---------------------------------
+
+# This checks if your installation media is available at {{ hana_installdir }}
+# Then it reads the configuration and stores it as a fact: hana_version
+# The role also mounts the configuration directory if necessary.
+
+# If you have the rar file on an NFS-Share define the following:
+# The rest though is optional
+# NFS Share that holds the rar files
+install_nfs: "10.32.97.3:/public/sap-software"
+# directory, where Hana install binaries are needed
+installroot: /install
+# Hana Install version (RAR Archive Number)
+installversion: "51051151"
+# unrar command
+# RedHat does not provide an unrar command, so that you need to provide it externally
+# Some examples, where to get working unrar packages
+# RHEL6
+#unrar_pkg: http://apt.sw.be/redhat/el6/en/x86_64/rpmforge/RPMS/unrar-4.2.3-1.el6.rf.x86_64.rpm
+# RHEL 7:
+#unrar_pkg: https://forensics.cert.org/centos/cert/7/x86_64/unrar-5.3.0-1.el7.x86_64.rpm 
+# I prefer putting it on the server where my archives live 
+unrar_cmd: {{ installroot + "/bin/unrar" }}
+# If you have a different installation source you can just define
+# the following variable, otherwise leave as default
+hana_installdir: {{ installroot + "/" + installversion }}
+
+
 
 # Time
 #----------
@@ -67,58 +101,6 @@ logvols:
   <name2>:
     ...
     
-# HANA Setup
-#------------
-
-# Gives the name of the customer of the Hana DB
-customer: <string>
-
-# NFS Server mountpoint where install media resides:
-install_nfs: "10.32.97.3:/public/sap-software"
-
-# directory, where Hana install binaries are needed
-installroot: /install
-
-# Hana Install version (RAR Archive Number)
-installversion: "51051151"
-
-# User and GroupIDs to use for sap (Default: undef)
-id_user_sapadm: 
-id_user_sidadm:
-id_group_shm:
-id_group_sapsys:
-
-# Initial passwords in clear text
-pw_sapadm:
-pw_sidadm:
-pw_systemuser:
-
-# Optional: List of hosts in a scale out cluster
-scaleouthosts
-
-# Mandatory: SAP SystemID (3 Characters) and Instance Number (2 Numbers)
-# For HANA Express always use HXE and 90(otherwise developer licence gets invalid)
-sap_system_id: HXE
-sap_instance: 90
-
-# Optional: Hostname for Hana Installation
-# required for multi-homed settings and cluster environments
-sap_hostname:
-
-# SAP system-usage
-# Please use one of: production, test, development, custom
-sap_hana_system_usage: custom
-
-# HANA Components  to be installed
-# possible options depend on HANA version
-sap_hana_components: "clients,server"
-
-# HANA System Type 
-# defaults to Master in Scale-Up setups, but will be different in scale-out deployments
-sap_hana_system_type: "Master"
-
-
-
 
 TODO
 ====
