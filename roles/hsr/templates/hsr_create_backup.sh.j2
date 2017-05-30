@@ -3,7 +3,7 @@
 # Only for multi instance installations!
 # Without Multi-Instance installations delete -d SystemDB
 
-su - {{ item.value.hana_sid_small }}adm -c "echo \"\c -i {{ item.value.hana_instance_number }} -u SYSTEM -p {{ item.value.hana_pw_system_user_clear }} -d SystemDB
+su - {{ item.value.hana_sid|lower }}adm -c "echo \"\c -i {{ item.value.hana_instance_number }} -u SYSTEM -p {{ item.value.hana_pw_system_user_clear }} -d SystemDB
 BACKUP DATA USING FILE ('{{ item.value.hsr_backup_directory }}')\" | hdbsql"
 
 if [ $? != "0" ]; then 
@@ -24,11 +24,11 @@ fi
 # Ansible Fact
 if [ -d /etc/ansible/facts.d ]; then
 
-cat << EOF > /etc/ansible/facts.d/hsr_backup_configured_{{ item.value.hana_sid_small }}.fact
-hsr_backup_configured_{{ item.value.hana_sid_small }}: true
+cat << EOF > /etc/ansible/facts.d/hsr_backup_configured_{{ item.value.hana_sid|lower }}.fact
+hsr_backup_configured_{{ item.value.hana_sid|lower }}: true
 EOF
 
-chmod 644 /etc/ansible/facts.d/hsr_backup_configured_{{ item.value.hana_sid_small }}.fact
+chmod 644 /etc/ansible/facts.d/hsr_backup_configured_{{ item.value.hana_sid|lower }}.fact
 
 fi
 

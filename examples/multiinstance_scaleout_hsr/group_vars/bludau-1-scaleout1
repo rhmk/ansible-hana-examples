@@ -42,8 +42,6 @@ instances:
     hana_system_type: "Master"
 # System group ID for Linux group <sid>shm
     id_group_shm: "30220"
-# SID for Deployment (doubled)
-    hana_sid_small: hxe 
 # Addhosts for Scale-Out Enviornments
 # Hana install config file::
 # Additional Hosts addhosts
@@ -54,6 +52,7 @@ instances:
     hana_instance_hostname: dc1system01
 # Additional Hosts addhosts (doubled should be hana_addhosts)
     addhosts: dc1system01
+# SID for Deployment (doubled)
 # Upper HANA SID
     hana_sid: HXE 
 # HANA instance Number
@@ -75,7 +74,6 @@ instances:
     hana_components: "client,server"
     hana_system_type: "Master"
     id_group_shm: "20220"
-    hana_sid_small: a01
     hana_addhosts: dc1system02 
     hana_instance_hostname: dc1system01 
     addhosts: dc1system01
@@ -99,8 +97,6 @@ hsr:
     hana_instance_hostname: dc2system01
 # Upper HANA SID
     hana_sid: HXE
-# Lower HANA SID
-    hana_sid_small: hxe
 # HANA instance Number
     hana_instance_number: 90
 # System User Password needed for Configuration of HANA System Replication
@@ -128,7 +124,6 @@ hsr:
   a01:
     hana_instance_hostname: dc1system01
     hana_sid: A01
-    hana_sid_small: a01
     hana_instance_number: 91
     hana_pw_system_user_clear: System123
     hsr_name: bludau-1-scaleout1

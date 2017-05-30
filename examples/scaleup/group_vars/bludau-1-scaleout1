@@ -15,7 +15,6 @@ instances:
     hana_components: "client,server"
     hana_system_type: "Master"
     id_group_shm: "30220"
-    hana_sid_small: hxe 
     hana_instance_hostname: dc1system01
     addhosts: dc1system01
     hana_sid: HXE 

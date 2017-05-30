@@ -42,9 +42,9 @@ hdbnsutil -sr_register --name={{ item.value.hsr_name }} --replicationMode={{ ite
 
 /usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }} -function StartSystem
 
-#cat << EOF > /etc/facter/facts.d/hsr{{ item.value.hana_sid_small }}.sh
+#cat << EOF > /etc/facter/facts.d/hsr{{ item.value.hana_sid|lower }}.sh
 ##!/bin/bash
-#echo "hsr{{ item.value.hana_sid_small }}=yes"
+#echo "hsr{{ item.value.hana_sid|lower }}=yes"
 #EOF
-#chmod 755 /etc/facter/facts.d/hsr{{ item.value.hana_sid_small }}.sh
+#chmod 755 /etc/facter/facts.d/hsr{{ item.value.hana_sid|lower }}.sh
 

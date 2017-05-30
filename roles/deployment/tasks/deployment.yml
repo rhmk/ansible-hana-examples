@@ -3,7 +3,7 @@
 - name: Crate File for Scale-Out Enviornments
   template:
     src: deployment_install_hana_SID.conf.j2
-    dest: /usr/local/bin/install_hana_{{ item.value.hana_sid_small }}.conf
+    dest: /usr/local/bin/install_hana_{{ item.value.hana_sid|lower }}.conf
     mode: 0755
   with_dict: "{{ instances }}"
     

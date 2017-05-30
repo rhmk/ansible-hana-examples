@@ -15,7 +15,6 @@ instances:
     hana_components: "client,server"
     hana_system_type: "Master"
     id_group_shm: "30220"
-    hana_sid_small: hxe
     hana_addhosts: dc2system02
     hana_instance_hostname: dc2system01
     addhosts: dc2system01
@@ -32,7 +31,6 @@ instances:
     hana_system_usage: custom
     hana_components: "client,server"
     hana_system_type: "Master"
-    hana_sid_small: a01
     hana_instance_hostname: dc2system01 
     hana_sid: A01
     hana_instance_number: 91
@@ -43,7 +41,6 @@ hsr:
   hxe:
     hana_instance_hostname: dc2system01
     hana_sid: HXE
-    hana_sid_small: hxe
     hana_instance_number: 90
     hana_pw_system_user_clear: System123
     hsr_name: bludau-1-scaleout2-hxe
@@ -56,7 +53,6 @@ hsr:
   a01:
     hana_instance_hostname: dc2system01
     hana_sid: A01
-    hana_sid_small: a01
     hana_instance_number: 91
     hana_pw_system_user_clear: System123
     hsr_name: bludau-1-scaleout2

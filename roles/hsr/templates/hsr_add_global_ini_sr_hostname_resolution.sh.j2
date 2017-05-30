@@ -17,7 +17,7 @@ if [ "`/usr/sap/hostctrl/exe/sapcontrol -nr {{ item.value.hana_instance_number }
 fi
 
 
-cat << EOF >> /hana/shared/{{  item.value.hana_sid  }}/global/hdb/custom/config/global.ini
+cat << EOF >> /hana/shared/{{  item.value.hana_sid|upper  }}/global/hdb/custom/config/global.ini
 
 [system_replication_hostname_resolution]
 <%- (1..(hsr_hostname_resolution_ip.length)).each do |id| - }}

@@ -1,11 +1,11 @@
 #!/bin/bash
 # Check if puppet variable is filled
-if [ "{{ hana_sid_small }}" ]; then
+if [ "{{ hana_sid|lower }}" ]; then
  # Check if hana install filed extists
  # Please change to real hana install test!
- if [ ! -f "/hana/shared/hana_installed_{{ hana_sid_small }}.txt" ]; then
+ if [ ! -f "/hana/shared/hana_installed_{{ hana_sid|lower }}.txt" ]; then
   #  Get all Members of the Cluster deployed over puppet
-  for i in $(cat /usr/local/bin/install_hana_{{ hana_sid_small }}.conf | sed "s/,/ /g"); do
+  for i in $(cat /usr/local/bin/install_hana_{{ hana_sid|lower }}.conf | sed "s/,/ /g"); do
    if [ -f "/hana/shared/$i" ]; then
     echo "System $i ready" 
    else
@@ -13,9 +13,9 @@ if [ "{{ hana_sid_small }}" ]; then
      exit 0
    fi
   done
-  touch /hana/shared/hana_installed_{{ hana_sid_small }}.txt
+  touch /hana/shared/hana_installed_{{ hana_sid|lower }}.txt
   cd {{ hana_installdir }}/DATA_UNITS/HDB_SERVER_LINUX_*/
-  ./hdblcm --ignore=check_signature_file --configfile=/tmp/hana_inst_{{ hana_sid_small }}.cfg -b --remote_execution=saphostagent >> /var/log/hana_install.log
+  ./hdblcm --ignore=check_signature_file --configfile=/tmp/hana_inst_{{ hana_sid|lower }}.cfg -b --remote_execution=saphostagent >> /var/log/hana_install.log
  fi
 else
  echo "Error, no SAPSYSTEMNAME_SMALL!"
