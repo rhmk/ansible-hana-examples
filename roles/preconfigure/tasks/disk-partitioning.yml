@@ -7,14 +7,15 @@
 
 - name: create disk partitions 
   shell: |
-   if pvdisplay -C '{{ item.key }}'1 ; then
-       echo '{{ item.key }}' in use
+   vg=$(pvdisplay -c '{{ item.key }}1' | awk -F: ' {print $2}')
+   if [ -n "$vg" ]; then
+       echo '{{ item.key }}' used by ${vg}
        exit 0
    else
        sgdisk --zap {{ item.key }}
        parted -s -a optimal '{{ item.key }}' mklabel msdos && parted -s -a optimal -- '{{ item.key }}' unit compact mkpart primary ext3 "1" "-1" &&  parted -s -a optimal -- '{{ item.key }}' set 1 lvm on
-      /sbin/pvcreate '{{ item.key }}'1
-      exit 90
+      /usr/sbin/partprobe '{{ item.key }}'
+      /sbin/pvcreate '{{ item.key }}'1 && exit 90
    fi
   with_dict: "{{ disks }}"
   register: pvcreate_result
@@ -24,7 +25,7 @@
     - disk_init
 
 - name: create volume groups on it
-  lvg: state=present vg="{{ item.value }}" pvs="{{ item.key }}1"
+  lvg: state=present vg="{{ item.value }}" pvs="{{ item.key | default(omit) }}1"
   with_dict: "{{ disks }}"
   tags:
   - disk_init

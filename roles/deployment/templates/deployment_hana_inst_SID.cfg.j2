@@ -85,10 +85,10 @@ custom_cfg=
 change_initial_ssfs_key=y
 
 # Restrict maximum memory allocation?
-restrict_max_mem=
+restrict_max_mem={{ item.value.restrict_max_mem | default ('') }}
 
 # Maximum Memory Allocation in MB
-max_mem=
+max_mem={{ item.value.max_mem | default ('') }}
 
 # Database User (SYSTEM) Password
 system_user_password={{ item.value.hana_pw_system_user_clear }}
