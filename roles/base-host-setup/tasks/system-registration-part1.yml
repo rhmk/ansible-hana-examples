@@ -19,9 +19,14 @@
 
 - name: ensure system is registered using known activation key
   redhat_subscription:
-    activationkey: "{{ reg_activation_key }}"
-    org_id: "{{ reg_organization_id }}"
-    # pool: "{{ reg_sub_name }}"
+    activationkey: "{{ reg_activation_key | default(omit) }}"
+    org_id: "{{ reg_organization_id | default(omit)}}"
+    pool: "{{ reg_pool | default(omit) }}"
+    pool_ids: "{{ reg_pool_ids | default(omit) }}"
+    server_insecure: yes
+    autosubscribe: yes
+    username: "{{ reg_username | default(omit) }}"
+    password: "{{ reg_password | default(omit) }}"
     state: present
   when: ( subscription_status.stdout != "Subscribed" )
 
