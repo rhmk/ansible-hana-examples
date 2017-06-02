@@ -10,7 +10,7 @@
 
 # Changed: Thomas Bludau 20170508
 # Changed on every Customer Side
-# It is necessary that you have a fix repository, 
+# It is necessary that you have a fix repository,
 # otherwhile addons could not be compatible.
 # Requirement is that the systems are Registed to a
 # existing Repository.

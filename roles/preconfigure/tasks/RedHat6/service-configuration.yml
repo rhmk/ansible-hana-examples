@@ -4,7 +4,8 @@
   selinux: state=disabled
 
 
-# Change to ntpserver Itemlist !!!
+# TODO: customers may set their own time service, so it may be used to an external role
+# this should only do a check, if timing is working
 - name: set ntp server via ntpd
   lineinfile: 
     dest: /etc/ntp.conf 
@@ -17,6 +18,8 @@
   service: name=ntpd state=started enabled=yes
   when: not( (ntpserver is undefined) or (ntpserver is none) or (ntpserver | trim == '') )
 
+# TODO: instead of deactivating firewall it should configure the firewall according
+# to HANA instance number
 - name: disable iptables
   service: name=iptables state=stopped enabled=no
 

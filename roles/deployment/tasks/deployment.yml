@@ -6,7 +6,7 @@
     dest: /usr/local/bin/install_hana_{{ item.value.hana_sid|lower }}.conf
     mode: 0755
   with_dict: "{{ instances }}"
-    
+
 # Generate Template under Linux
 # ./hdbinst --dump_configfile_template=/tmp/test.cfg
 - name: copy installation answer file

@@ -1,0 +1,49 @@
+---
+
+- name: Enable Debugging
+  debug:
+    verbosity: "{{ debuglevel }}"
+
+# The scope of this role is to do some common things
+# that customers typically do on an individual basis in kickstart or
+# with their own configuration roles
+#
+# Currently it fulfills the following basic setup
+#  - register a system against satellite 6 or RHN with an activation key
+#  - controls that the required EUS channels are available
+#  - maybe: disk-setup, preconfigure role should only do a disk-check
+#  - maybe: ntpserver setup (should only be controlled in the preconfigure role)
+#  - TODO: network setup (we currently assume networking is working correctly after installation)
+#  - TODO: DNS, hostname configuration (Nonetheless this will only be controlled in the preconfigure role)
+
+
+# If you do not use satellite 6 or RHN you need to define
+# check_repos: false in your variable definition (globally)
+# and make sure that the correct EUS channels for HANA are mounted
+- include: ./system-registration-part1.yml
+  when: check_repos
+  tags:
+    - osprep
+    - system-registration
+
+- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/system-registration.yml' }}"
+  when: check_repos
+  tags:
+    - osprep
+    - system-registration
+
+# CURRENTLY STILL PART of preconfigure role
+#
+# Create the installation disks
+# If you want to add disks, or your installation method (kickstart, Satellite, etc.) does not setup the HANA disks correctly,
+# this should give you the possibility to configure your disks
+# This is not fully tested, so use with caution and test extensively
+#- include: ./disk-partitioning.yml
+#  when:
+#    - disk_partitioning
+#  tags:
+#    - osprep
+#    - disk_partitioning
+
+### Now your system is ready to get HANA installed
+...

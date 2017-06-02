@@ -3,6 +3,8 @@
 - name: disable selinux
   selinux: state=disabled
 
+### TODO: move NTP server setup in a separate role (typically ready at customer site)
+### or maybe customer is still using ntpd instead of chrony on RHEL7
 - name: set ntp server via chrony
   lineinfile:
     dest: /etc/chrony.conf
@@ -15,8 +17,12 @@
   service: name=chronyd state=started enabled=yes
   when: not( (ntpserver is undefined) or (ntpserver is none) or (ntpserver | trim == '') )
 
+### we set ignore_errors true in case a service is not installed in the RHEL base
+
+### TODO: Configure Firewall according to instance number instead of disabling
 - name: disable firewalld
   service: name=firewalld state=stopped enabled=no
+  ignore_errors: True
 
 - name: disable kdump
   service: name=kdump state=stopped enabled=no

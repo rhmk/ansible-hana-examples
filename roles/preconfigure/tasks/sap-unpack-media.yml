@@ -1,0 +1,47 @@
+---
+
+- name: install NFS packages for mounting
+  yum: state=present name=nfs-utils
+
+- name: install unrar package
+  yum: state=present name="{{ unrar_pkg }}"
+  when: not( (unrar_pkg is undefined) or (unrar_pkg is none) or (unrar_pkg | trim == '') )
+
+- file:
+    name: /tmp/install
+    state: directory
+    owner: root
+    group: root
+
+- file:
+    name: "{{ installroot }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: mount installdir
+  mount:
+      src: "{{ install_nfs }}"
+      name: /tmp/install
+      fstype: nfs
+      state: mounted
+
+- name: extract HANA install media
+  shell: |
+    UNRAR="{{ unrar_cmd | default('unrar') }}"
+    ${UNRAR:-unrar} x "{{ '/tmp/install/' + installversion + '_part1.exe' }}"
+  args:
+    chdir: "{{ installroot }}"
+    creates: "{{ installroot + '/' + installversion + '/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm' }}"
+
+- name: unmount installdir
+  mount:
+      src: "{{ install_nfs }}"
+      name: /tmp/install
+      fstype: nfs
+      state: unmounted
+
+- file:
+    name: /tmp/install
+    state: absent
+...

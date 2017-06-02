@@ -5,15 +5,16 @@
 #    verbosity: "{{ debuglevel }}"
 
 # Need this to check if installed was finished
+# TODO: Maybe change things to setfact module
 
 - name: Create ansible facts directory
-  file: 
+  file:
     path: "/etc/ansible/facts.d"
     state: directory
     recurse: yes
 
 
-- name: create backup-directory 
+- name: create backup-directory
   file:
     path: "{{ item.value.hsr_backup_directory }}"
     state: directory
@@ -31,9 +32,9 @@
 
 # Deploy Configuration-Scripts
 
-- name: Deploy register Configuration-Scripts  
+- name: Deploy register Configuration-Scripts
   template:
-    src: hsr_sr_register.sh.j2 
+    src: hsr_sr_register.sh.j2
     dest: /usr/local/bin/hsr_sr_register_{{ item.value.hana_sid|lower }}.sh
     mode: 0755
   with_dict: "{{ hsr }}"
@@ -54,7 +55,7 @@
     chdir: "/usr/local/bin/"
     creates: /etc/ansible/facts.d/hsr_backup_configured_{{ item.value.hana_sid|lower }}.fact
   with_dict: "{{ hsr }}"
-  when: 
+  when:
     - hsr_deploy_type is defined
     - hsr_deploy_type == "enable"
 
@@ -66,7 +67,7 @@
     chdir: "/usr/local/bin"
     creates: /etc/ansible/facts.d/hsr_configured_{{ item.value.hana_sid|lower }}.fact
   with_dict: "{{ hsr }}"
-  when: 
+  when:
     - hsr_deploy_type is defined
     - hsr_deploy_type == "enable"
 #
@@ -77,7 +78,7 @@
     chdir: "/usr/local/bin"
     creates: /etc/ansible/facts.d/hsr_configured_{{ item.value.hana_sid|lower }}.fact
   with_dict: "{{ hsr }}"
-  when: 
+  when:
     - hsr_deploy_type is defined
     - hsr_deploy_type == "register"
 
