@@ -11,8 +11,8 @@ exit 1
 fi
 
 # Only Prefix had to be defined with multiple container databases. otherweise there is a error
-su - <%=@hana_sid_small%>adm -c "echo \"\c -i <%=@hana_instance_number%> -u SYSTEM -p <%=@hana_pw_system_user_clear%> -d <%=@hana_sid%>
-BACKUP DATA USING FILE ('<%=@hana_sid%>')\" | hdbsql"
+su - {{ item.value.hana_sid|lower }}adm -c "echo \"\c -i {{ item.value.hana_instance_number }} -u SYSTEM -p {{ item.value.hana_pw_system_user_clear }} -d {{ item.value.hana_sid | upper }}
+BACKUP DATA USING FILE ('{{ item.value.hana_sid | upper }}')\" | hdbsql"
 
 if [ $? != "0" ]; then
 exit 1
