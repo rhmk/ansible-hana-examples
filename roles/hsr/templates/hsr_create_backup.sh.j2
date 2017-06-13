@@ -10,6 +10,15 @@ if [ $? != "0" ]; then
 exit 1
 fi
 
+# Only Prefix had to be defined with multiple container databases. otherweise there is a error
+su - <%=@hana_sid_small%>adm -c "echo \"\c -i <%=@hana_instance_number%> -u SYSTEM -p <%=@hana_pw_system_user_clear%> -d <%=@hana_sid%>
+BACKUP DATA USING FILE ('<%=@hana_sid%>')\" | hdbsql"
+
+if [ $? != "0" ]; then
+exit 1
+fi
+
+
 # Puppet 3 Facts
 if [ -d /etc/facter/facts.d/ ]; then
 
