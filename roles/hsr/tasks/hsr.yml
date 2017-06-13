@@ -20,7 +20,7 @@
     state: directory
   with_dict: "{{ hsr }}"
 
-- name: Crate File for Scale-Out Enviornments
+- name: Create File for Scale-Out Enviornments
   template:
     src: hsr_create_backup.sh.j2
     dest: /usr/local/bin/hsr_create_backup_{{ item.value.hana_sid|lower }}.sh
@@ -58,7 +58,6 @@
   when:
     - hsr_deploy_type is defined
     - hsr_deploy_type == "enable"
-
 
 
 - name: execute enable system-replication
