@@ -26,7 +26,6 @@
 
 - file:
     name: "{{  hana_installdir }}"
->>>>>>> upstream/master
     state: directory
     owner: root
     group: root

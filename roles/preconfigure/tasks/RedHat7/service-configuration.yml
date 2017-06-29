@@ -1,4 +1,7 @@
 ---
+# Example:
+# sapnote 2292690 01.12.2016
+# Check: Thomas Bludau 30.06.2017
 
 - name: disable selinux
   selinux: state=disabled
