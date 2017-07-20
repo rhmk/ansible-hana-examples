@@ -1,4 +1,12 @@
 ---
+#test Eingaben andbuick 2017-07-20
+#
+#
+#
+#
+#
+#
+
 
 - name: regenerate grub2 conf
   shell: grub2-mkconfig -o /boot/grub2/grub.cfg
