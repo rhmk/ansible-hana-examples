@@ -16,25 +16,15 @@ if [ $? != "0" ]; then
 exit 1
 fi
 
+# ONLY when using HANA 2.0
 # Only Prefix had to be defined with multiple container databases. otherweise there is a error
 su - {{ item.value.hana_sid|lower }}adm -c "echo \"\c -i {{ item.value.hana_instance_number }} -u SYSTEM -p {{ item.value.hana_pw_system_user_clear }} -d {{ item.value.hana_sid | upper }}
 BACKUP DATA USING FILE ('{{ item.value.hana_sid | upper }}')\" | hdbsql"
 
 
-# ONLY when using HANA 2.0
-## Only Prefix had to be defined with multiple container databases. otherweise there is a error
-#
-#su - {{ item.value.hana_sid|lower }}adm -c "echo \"\c -i {{ item.value.hana_instance_number }} -u SYSTEM -p {{ item.value.hana_pw_system_user_clear }} -d {{ item.value.hana_sid }}
-
-# ONLY when using HANA 2.0
-## Only Prefix had to be defined with multiple container databases. otherweise there is a error
-#
-#su - {{ item.value.hana_sid|lower }}adm -c "echo \"\c -i {{ item.value.hana_instance_number }} -u SYSTEM -p {{ item.value.hana_pw_system_user_clear }} -d {{ item.value.hana_sid }}
-#BACKUP DATA USING FILE ('{{ item.value.hana_sid }}')\" | hdbsql"
-#
-#if [ $? != "0" ]; then
-#exit 1
-#fi
+if [ $? != "0" ]; then
+exit 1
+fi
 
 
 # Puppet 3 Facts
