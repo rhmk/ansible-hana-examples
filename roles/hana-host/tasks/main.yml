@@ -11,7 +11,6 @@
 # Requirement is that the systems are Registed to 
 # existing Repository.
 
-<<<<<<< HEAD
 # If you do not use satellite 6 or RHN you need to define
 # check_repos: false in your variable definition (globally)
 # and make sure that the correct EUS channels for HANA are mounted
