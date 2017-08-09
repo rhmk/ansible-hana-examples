@@ -73,13 +73,13 @@ See "man ansible" for password options. You could also use ssh-keys and sudo wit
 
 3. If your connection works you can kick-off the playbook
 ```
-$ ansible-playbook -vvv  -b -e @examples/var.yaml -l hana-servers hana_prep.yaml
+$ ansible-playbook -vvv  -b -e @examples/var.yaml -l hana-servers hana_sysprep.yml
 
   -vvv enables debugging output
   -b : switches execution to root
   -e @examples/var.yaml points to the file with the defined variables
   -l hana-servers limits the execution to hana-servers as defined in /etc/ansible/hosts or a particular hostname
-  hana_prep.yaml: Playbook that defines the actual role
+  hana_sysprep.yml: Playbook that defines the actual role
 ```
 
  
