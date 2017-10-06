@@ -1,5 +1,5 @@
 ---
-hana_installdir: /install/shared/hana_inst/51051151/
+hana_installdir: /hana/hana_inst/51052325/
 hostname: dc1system01
 hana_pw_hostagent_ssl: Ab01%%bA
 id_user_sapadm: "30200"
@@ -20,6 +20,5 @@ instances:
     hana_sid: HXE 
     hana_instance_number: 90
     hana_system_usage: custom
-    hana_pw_system_user_clear: System123
 ...
 
