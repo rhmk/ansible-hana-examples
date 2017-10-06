@@ -31,13 +31,3 @@ resource "aws_instance" "system" {
   }
 }
 
-resource "aws_network_interface" "backup" {
-  subnet_id       = "${var.aws_subnet_2}"
-  private_ips     = ["${var.ip_2}"]
-  security_groups = ["${var.aws_security_group_default}"]
-
-  attachment {
-    instance     = "${aws_instance.system.id}"
-    device_index = 1
-  }
-}
