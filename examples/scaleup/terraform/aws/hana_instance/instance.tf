@@ -4,7 +4,6 @@ variable "aws_amis" {}
 variable aws_security_group_default {}
 variable aws_key_pair {}
 variable aws_subnet {}
-variable aws_subnet_2 {}
 variable az {}
 
 resource "aws_instance" "system" {

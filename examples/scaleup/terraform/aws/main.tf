@@ -65,7 +65,6 @@ module "system01dc1" {
   aws_security_group_default = "${aws_security_group.default.id}"
   aws_key_pair = "${aws_key_pair.auth.id}"
   aws_subnet = "${aws_subnet.hanadc1.id}"
-  aws_subnet_2 = "${aws_subnet.hanadc1backup.id}"
   az = "eu-central-1b"
 }
 
