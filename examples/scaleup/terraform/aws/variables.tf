@@ -8,7 +8,7 @@ DESCRIPTION
 }
 
 variable "key_name" {
-  description = <<DESCRIPTION 
+  description = <<DESCRIPTION
 Desired name of AWS key pair
 Example: hana
 DESCRIPTION
