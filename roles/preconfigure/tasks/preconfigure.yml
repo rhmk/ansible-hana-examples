@@ -1,6 +1,73 @@
 ---
+# andbuick / 04.10.2017
+# Prerequisite for installing RHEL for SAP
+# 
+# SAP NOTE 2002167  Version 13 / 31.07.2017 
+# RHEL 7.2 & matching subscribtion for SAP Applications
+#
+# ##### root authroization reqquired #####
+# 
 
-- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/package-installation.yml' }}"
+# ######## Update systemd to avoid HANA crashes due to unintended deletion of IPC segments 
+# systemd-219-19.el7_2.4.
+#
+
+# ######## Ensure, the CPU performance governor is set to the correct value. Therefore the "sap-hana" tuned profile must be activated on all systems
+# ######## running SAP HANA
+# 
+# yum install tuned-profiles-sap-hana
+# systemctl start tuned
+# systemctl enable tuned
+# tuned-adm profile sap-hana
+#
+# ######## Turn off auto-numa balancing
+# ######## SAP HANA is a NUMA (non-uniform memory access) aware database. Thus it does not rely on the
+# ######## Linux kernel's features to optimize NUMA usage automatically. Depending on the workload, it can be
+# ######## beneficial to turn off automatical NUMA balancing. For this purpose, add "kernel.numa_balancing = 0"
+# ######## to /etc/sysctl.d/sap_hana.conf and reconfigure the kernel by running
+#
+# sysctl -p /etc/sysctl.d/sap_hana.conf
+#
+# ######## Turn off auto-numa balancing
+# sysctl -p /etc/sysctl.d/sap_hana.conf
+# 
+# ######## Additonally the "numad" daemon must be disabled
+# systemctl stop numad
+# systemctl disable numad
+#
+# ######## Disable transparent hugepages in the file /etc/default/grub
+# echo never > /sys/kernel/mm/transparent_hugepage/enabled
+# ######## First, modifying the file /etc/default/grub and appending the following parameter to the line starting with "GRUB_CMDLINE_LINUX":
+# transparent_hugepage=never
+# ######## In case of a non-UEFI configuration, activating of the new configuration by issuing the command
+# grub2-mkconfig -o /boot/grub2/grub.cfg
+#
+# ######## Configure C-States for lower latency
+# ######## SAP recommends to limit the C-states to C0 and C1 by setting the following parameter
+# processor.max_cstate=1
+# 
+# ######## configure the "intel_idle" kernel module to allow C-State C1
+# ######## set this parameter in the kernel commandline by modifying /etc/default/grub:
+# ######## Append the following parameter to the line starting with "GRUB_CMDLINE_LINUX":
+# intel_idle.max_cstate=1
+# processor.max_cstate=1 intel_idle.max_cstate=1
+#
+# ####### RHEL 7.2 is delivered with SELinux enabled by default.
+# ####### Since there is no SELinux policy available for SAP HANA, leaving SELinux enabled can lead to
+# ####### problems when running SAP HANA on RHEL.
+# ####### disable SELinux change the line SELINUX=enforcing in /etc/sysconfig/selinux and reboot the system.:
+# ####### SELINUX=enforcing to
+# SELINUX=disabled
+#
+#
+# ####### Linux: ONLY IF Running SAP applications compiled with GCC 5.x
+# yum install compat-sap-c++-5
+# rpm -q compat-sap-c++-5
+# compat-sap-c++-5-5.3.1-10.el7_2.x86_64
+
+
+- include: "{{ './' + ansible_distribution + a
+# ansible_distribution_major_version + '/package-installation.yml' }}"
   tags:
     - osprep
     - packages
@@ -63,6 +130,27 @@
     mode: 0755
  
 - name: Execute HANA Host Agent SSL Configuration
+# andbuick / 08.10.2017
+# SAP NOTE 2130510  Version 3 / 28.06.2016 latest Host Agent 7.21
+# SAP NOTE 1907566 Version 5 / 27.02.2017 latest documentation
+# SAP NOTE 401162 Version 20 / 20.03.2017
+# SAP NOTE 1292836 Version 6 / 18.12.2014
+# SAP NOTE 1031096 Version 36 / 20.10.2015
+#
+# Vom SAP Host-Agent werden keine Linux-Kernel-Parameter geändert.
+# Service in etc/service/saphostctrl Default Port 1128 SAP HANA & SAP NetWeaver Services SOAP/HTTP
+# Service in etc/service/saphostctrls Default Port 1129 SAP HANA & SAP NetWeaver Services SOAP/HTTP
+# 
+# Starten / Stoppen als Root (root permissions)
+# 
+# Der Host-Agent muss immer in der aktuellsten Version vorgehalten werden: derzeit 7.21
+# Installationsverzeichnis: /usr/sap/hostctrl
+# https://wiki.scn.sap.com/wiki/display/ATopics/SAP+Host+Agent+-+Frequently+Asked+Questions
+
+- name: Restart HostAgent
+  shell: /usr/sap/hostctrl/exe/saphostexec -restart
+  listen: "Execute HANA Host Agent SSL Configuration"
+
   shell: /usr/local/bin/preconfigure_sap_install_sslforsaphostagent.sh
   notify: "Restart HostAgent"
   args:
