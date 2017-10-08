@@ -1,11 +1,12 @@
 ---
 
-- name: Set latest supported RedHat EUS release
-  shell: subscription-manager release --set=7.2 
-  register: rh_release
-  changed_when: rh_release.rc == 0
-  failed_when: rh_release.rc > 0
-  when: ( ansible_distribution_version != 7.2 )
+# Unusable if Release is changing 
+#- name: Set latest supported RedHat EUS release
+#  shell: subscription-manager release --set=7.2 
+#  register: rh_release
+#  changed_when: rh_release.rc == 0
+#  failed_when: rh_release.rc > 0
+#  when: ( ansible_distribution_version != 7.2 )
 
 
 - name: ensure system has access to the right repos
