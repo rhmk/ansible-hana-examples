@@ -12,7 +12,8 @@ resource "aws_instance" "system" {
     private_key = "${file("/root/.ssh/id_rsa")}"
     agent = false
   }
-  instance_type = "t2.micro"
+  #instance_type = "t2.micro"
+  instance_type = "r4.xlarge"
   availability_zone = "${var.az}"
   ami = "${var.aws_amis}"
   key_name = "${var.aws_key_pair}"
@@ -28,4 +29,24 @@ resource "aws_instance" "system" {
     ]
   }
 }
+
+resource "aws_ebs_volume" "usrsap" {
+    availability_zone = "${var.az}"
+    size = 50 
+}
+resource "aws_volume_attachment" "ebs_att_usrsap" {
+  device_name = "/dev/sdb"
+  volume_id   = "${aws_ebs_volume.usrsap.id}"
+  instance_id = "${aws_instance.system.id}"
+}
+resource "aws_ebs_volume" "hana" {
+    availability_zone = "${var.az}"
+    size = 80 
+}
+resource "aws_volume_attachment" "ebs_att_hana" {
+  device_name = "/dev/sdc"
+  volume_id   = "${aws_ebs_volume.hana.id}"
+  instance_id = "${aws_instance.system.id}"
+}
+
 
