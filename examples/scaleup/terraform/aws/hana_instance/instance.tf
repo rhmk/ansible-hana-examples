@@ -21,7 +21,6 @@ resource "aws_instance" "system" {
   private_ip = "${var.ip_1}"
   provisioner "remote-exec" {
     inline = [
-      "sudo yum install -y nfs-utils",
       "sudo mkdir -p /hana/hana_inst",
       "sudo bash -c \"echo $(ip a |grep -v inet6 |grep -v 127.0.0.1 | grep inet | awk {'print $2'} | awk -F'/' {'print $1'}) $(hostname -f) $(hostname -s) >> /etc/hosts\"",
       "sudo  hostnamectl set-hostname $(hostname -s)",
