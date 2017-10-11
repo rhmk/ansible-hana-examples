@@ -33,6 +33,7 @@
     - tuned
     - tuned-profiles-sap-hana
     - compat-sap-c++-5
+    - compat-sap-c++-6
 
 - name: base packages
   yum: state=latest name=@base
@@ -45,9 +46,10 @@
     - performance
     - compat-librariess
 
-- name: ensure minimum systemd version 219-19.el7_2.4
-  yum: state=present name=systemd-219-19.el7_2.4
-  notify: restart systemd-logind
+# Problems with defined state!
+#- name: ensure minimum systemd version 219-19.el7_2.4
+#  yum: state=present name=systemd-219-19.el7_2.4
+#  notify: restart systemd-logind
 
 - name: update system with the latest security fixes
   shell: yum -y update --security warn=no

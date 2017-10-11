@@ -1,7 +1,7 @@
 ---
 
 - name: Check Subscription Status
-  shell: LANG=C subscription-manager list | awk  ' ( $1 == "Status:" ) { print $2 } ' | sort -u
+  shell: LANG=C subscription-manager list | awk  ' ( $1 == "Status:" ) { print $2 } ' | grep ^Subscribed | sort -u 
   register: subscription_status
 
 - name: make sure registration credentials are provided
