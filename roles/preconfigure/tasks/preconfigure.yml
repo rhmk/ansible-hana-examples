@@ -66,8 +66,7 @@
 # compat-sap-c++-5-5.3.1-10.el7_2.x86_64
 
 
-- include: "{{ './' + ansible_distribution + a
-# ansible_distribution_major_version + '/package-installation.yml' }}"
+- include: "{{ './' + ansible_distribution + ansible_distribution_major_version + '/package-installation.yml' }}"
   tags:
     - osprep
     - packages
