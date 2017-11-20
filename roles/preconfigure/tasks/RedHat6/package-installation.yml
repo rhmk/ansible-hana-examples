@@ -46,7 +46,7 @@
     - large-systems
     - network-file-system-client
     - performance
-    - compat-librariess
+    - compat-libraries
 
 - name: update system with the latest security fixes
   shell: yum -y update --security warn=no

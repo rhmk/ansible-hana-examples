@@ -32,7 +32,7 @@
     ${UNRAR:-unrar} x "{{ '/tmp/install/' + installversion + '_part1.exe' }}"
   args:
     chdir: "{{ installroot }}"
-    creates: "{{ installroot + '/' + installversion + '/DATA_UNITS/HDB_SERVER_LINUX_X86_64/hdblcm' }}"
+    creates: "{{ installroot + '/' + installversion + '/DATA_UNITS/HDB_SERVER_LINUX_{{ ansible_architecture|upper }}/hdblcm' }}"
 
 - name: unmount installdir
   mount:

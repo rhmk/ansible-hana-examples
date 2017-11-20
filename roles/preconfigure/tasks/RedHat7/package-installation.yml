@@ -44,7 +44,15 @@
     - large-systems
     - network-file-system-client
     - performance
-    - compat-librariess
+    - compat-libraries
+  when: ( ansible_architecture == "x86_64" )
+
+- name: required package groups
+  yum: state=present name=@{{ item }}
+  with_items:
+    - compat-libraries
+  when: ( ansible_architecture == "ppc64le" )
+    
 
 # Problems with defined state!
 #- name: ensure minimum systemd version 219-19.el7_2.4
