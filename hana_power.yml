@@ -15,7 +15,7 @@
     force_repo_reset: false
     disk_partitioning: false
     ntp_servers:
-      - hostname: 9.153.164.9
+      - hostname: ntp.pool.org
  
     install_nfs: "v-srv1:/software/sap/HANA"
     installroot: /install
@@ -45,8 +45,8 @@
 
 
   roles:
-    #- system-registration
-    #- rhel-system-roles.timesync
-    #- preconfigure
+    - system-registration
+    - rhel-system-roles.timesync
+    - preconfigure
     - deployment
-    #- hsr
+    # hsr
