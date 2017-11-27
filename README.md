@@ -7,6 +7,10 @@ This git repository will have the following  branches as follows:
 - master:  current ongoing development, documentation may not be correct
 - stable:  fully tested releases incl. documentation
 
+### latest changes
+
+24-Nov-17: base-host-setup role is deprecated. This setup will move to my project ansible-generic-roles and more of it to rhel-system-roles/linux-system-roles project
+
 ### Possible deployment options
 
 hana scale-up

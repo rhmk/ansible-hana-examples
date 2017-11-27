@@ -5,7 +5,7 @@
   tags:
   - disk_init
 
-- name: create disk partitions 
+- name: create disk partitions (deprecated => use disk role instead)
   shell: |
    vg=$(pvdisplay -c '{{ item.key }}1' | awk -F: ' {print $2}')
    if [ -n "$vg" ]; then

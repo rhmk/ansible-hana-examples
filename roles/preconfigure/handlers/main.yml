@@ -12,7 +12,12 @@
 - name: restart systemd-logind
   service: name=systemd-logind state=restarted
 
-- include: ./preconfigure.yml
-  tags:
-    - hana-install
+-  name: Restart HostAgent
+   shell: /usr/sap/hostctrl/exe/saphostexec -restart
+   listen: "Execute HANA Host Agent SSL Configuration"
+
+# This is strange stuff, as these are tasks ...
+#- include: ./preconfigure.yml
+#  tags:
+#    - hana-install
 ...

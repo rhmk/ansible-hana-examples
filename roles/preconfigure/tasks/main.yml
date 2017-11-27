@@ -15,6 +15,7 @@
 # this should give you the possibility to configure your disks
 # This is not fully tested, so use with caution and test extensively
 # TODO: test or better move into base-os setup role
+# => deprecated: Use system-role
 - include: ./disk-partitioning.yml
   when:
     - disk_partitioning
@@ -27,11 +28,13 @@
 # and stores it in hanaversion.
 # It may also temporary mounts the installation path or an NFS server that contains the rar-files from SAP SWDC
 # Required to run
+# => Move to separate role
 - include: ./sap-check-media.yml
   tags:
     - hana-install
     - media-check
 
+# => this is the only role that should survive here
 - include: ./preconfigure.yml
   tags:
     - hana-install

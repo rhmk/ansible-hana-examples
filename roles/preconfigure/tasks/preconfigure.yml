@@ -146,10 +146,13 @@
 # Installationsverzeichnis: /usr/sap/hostctrl
 # https://wiki.scn.sap.com/wiki/display/ATopics/SAP+Host+Agent+-+Frequently+Asked+Questions
 
-- name: Restart HostAgent
-  shell: /usr/sap/hostctrl/exe/saphostexec -restart
-  listen: "Execute HANA Host Agent SSL Configuration"
+# The following lines are a handler script
+# moved to handlerr/tasks.yml
+#- name: Restart HostAgent
+#  shell: /usr/sap/hostctrl/exe/saphostexec -restart
+#  listen: "Execute HANA Host Agent SSL Configuration"
 
+- name: Ensure SSL is configured for saphostagent
   shell: /usr/local/bin/preconfigure_sap_install_sslforsaphostagent.sh
   notify: "Restart HostAgent"
   args:
