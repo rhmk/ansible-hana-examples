@@ -128,7 +128,7 @@
     dest: /usr/local/bin/preconfigure_sap_install_sslforsaphostagent.sh
     mode: 0755
  
-- name: Execute HANA Host Agent SSL Configuration
+#- name: Execute HANA Host Agent SSL Configuration
 # andbuick / 08.10.2017
 # SAP NOTE 2130510  Version 3 / 28.06.2016 latest Host Agent 7.21
 # SAP NOTE 1907566 Version 5 / 27.02.2017 latest documentation

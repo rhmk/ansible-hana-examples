@@ -45,7 +45,7 @@
 # Otherwise you got problems while integrating on hsr_names side ...
 
 - name: Get HANA Version Information
-  shell:  awk ' ( $1 == "fullversion:" ) { print $2}'  "{{ hana_installdir }}"/DATA_UNITS/HDB_SERVER_LINUX_X86_64/server/manifest
+  shell:  awk ' ( $1 == "fullversion:" ) { print $2}'  "{{ hana_installdir }}"/DATA_UNITS/HDB_SERVER_LINUX_{{ ansible_architecture|upper }}/server/manifest
   register: hana_version
 
 - name: Make HANA Version persistent

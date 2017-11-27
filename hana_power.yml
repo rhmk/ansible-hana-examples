@@ -1,0 +1,52 @@
+---
+- hosts: localhost
+
+  vars:
+    repositories:
+      - rhel-7-for-power-le-e4s-rpms
+      - rhel-sap-hana-for-rhel-7-for-power-le-e4s-rpms
+      - rhel-7-for-power-le-extras-rpms
+      # rhel-ha-for-rhel-7-server-for-power-le-e4s-rpms
+      # rhel-sap-for-rhel-7-for-power-le-e4s-rpms
+      # rhel-7-for-power-le-e4s-optional-rpms
+      # rhel-7-for-power-le-e4s-satellite-tools-6.2-rpms
+
+    force_rhel_release: 7.3
+    force_repo_reset: false
+    disk_partitioning: false
+    ntp_servers:
+      - hostname: ntp.pool.org
+ 
+    install_nfs: "v-srv1:/software/sap/HANA"
+    installroot: /install
+    hana_installdir: "{{ installroot + '/HDB_2.0_SPS02_R020.0_PWR_64' }}"
+    hostname: "{{ ansible_hostname }}"
+    hana_pw_hostagent_ssl: Ab01%%bA
+    id_user_sapadm: "30200"
+    id_group_shm: "30220"
+    id_group_sapsys: "30200"
+    pw_user_sapadm_clear: "Adm12356"
+ 
+    deployment_instance: true
+
+    instances:
+      h10:
+        id_user_sidadm: "30210"
+        pw_user_sidadm: "Adm12356"
+        hostname: "{{ ansible_hostname }}"
+        hana_instance_hostname: "{{ ansible_hostname }}"
+        hana_pw_system_user_clear: "System123"
+        hana_components: "client,server"
+        hana_system_type: "Master"
+        id_group_shm: "30220"
+        hana_sid: H10
+        hana_instance_number: 00
+        hana_system_usage: custom
+
+
+  roles:
+    - system-registration
+    - rhel-system-roles.timesync
+    - preconfigure
+    - deployment
+    # hsr

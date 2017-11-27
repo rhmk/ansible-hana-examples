@@ -70,7 +70,7 @@
 - name: execute unattended installation (logfile /var/log/hana_install.log )
   shell: ./hdblcm --configfile=/tmp/hana_install_{{ item.value.hana_sid|lower}}.cfg -b --remote_execution=saphostagent >> /var/log/hana_install_{{ item.value.hana_sid|lower}}.log
   args:
-    chdir: "{{ hana_installdir }}/DATA_UNITS/HDB_SERVER_LINUX_X86_64/"
+    chdir: "{{ hana_installdir }}/DATA_UNITS/HDB_SERVER_LINUX_{{ ansible_architecture|upper }}/"
     creates: "/usr/sap/{{ item.value.hana_sid|upper }}/HDB{{ item.value.hana_instance_number }}/exe/hdbdaemon"
   with_dict: "{{ instances }}"
   when: deployment_instance is defined
