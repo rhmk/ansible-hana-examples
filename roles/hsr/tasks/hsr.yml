@@ -76,7 +76,7 @@
     su - {{ item.value.hana_sid|lower }}adm -c 'python  /usr/sap/{{ item.value.hana_sid|upper }}/HDB{{item.value.hana_instance_number}}/exe/python_support/systemReplicationStatus.py'
   register: sr_state
   changed_when: false
-  failed_when: ( sr_state < 10 ) or ( sr_state.rc > 15 )
+  failed_when: ( sr_state.rc < 10 ) or ( sr_state.rc > 15 )
   with_dict: "{{ hsr }}"
 
 ############################
