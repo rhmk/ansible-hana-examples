@@ -73,25 +73,31 @@
 #
 - name: get system-replication state
   shell: |
-    su - {{ item.value.hana_sid|lower }}adm -c 'python  /usr/sap/{{ item.value.hana_sid|upper }}/HDB{{item.value.hana_instance_number}}/exe/python_support/systemReplicationStatus.py'
-  register: sr_state
+    su - "{{ item.value.hana_sid|lower }}adm" -c 'python  /usr/sap/{{ item.value.hana_sid|upper }}/HDB{{item.value.hana_instance_number}}/exe/python_support/systemReplicationStatus.py'
+  register: srstate
   changed_when: false
-  failed_when: ( sr_state.rc < 10 ) or ( sr_state.rc > 15 )
+  failed_when: ( srstate.rc < 10 ) or ( srstate.rc > 15 )
   with_dict: "{{ hsr }}"
+
+## NOTE: srstate contains a list of return values for all cluster, so the following is only working for one cluster !!!
+- name: debug replicationstate
+  debug: 
+    var: srstate
+    verbosity: 2
+
+- name: debug 
+  debug: 
+    msg: "{{ (srstate.results|first).stdout }}"
+    verbosity: 2
 
 ############################
 # This always need to be run first 
 - name: execute enable system-replication
-  shell: /usr/bin/su - {{ item.value.hana_sid|lower }}adm -c "hdbnsutil -sr_enable --name={{ item.value.hsr_name }}"
-  args:
-    chdir: "/usr/local/bin"
-    creates: /etc/ansible/facts.d/hsr_configured_{{ item.value.hana_sid|lower }}.fact
+  shell: |
+    /usr/bin/su - {{ item.value.hana_sid|lower }}adm -c "hdbnsutil -sr_enable --name={{ item.value.hsr_name }}"
   with_dict: "{{ hsr }}"
   register: sr_enable
-  when:
-    - hsr_deploy_type is defined
-    - hsr_deploy_type == "enable"
-    - ( sr_state.rc < 13 ) or ( sr_state.rc > 15 )
+  when: ( hsr_deploy_type is defined ) and ( hsr_deploy_type == "enable" ) and ( (srstate.results|first).stdout == "this system is not a system replication site" ) 
 
 ################################
 # The steps on the secondaries need to wait for the first to be ready
@@ -100,15 +106,17 @@
 #
 - name: make sure local directory for collecting SR keyfiles exist
   become: false
-  local_action: file path=roles/hsr/files/ state=directory mode=0755 
+  local_action: file path=/tmp/sr_key_files state=directory mode=0755 
   when:
     - hsr_deploy_type is defined
     - hsr_deploy_type == "enable"
 
 - name: fetch the remote dat 
   fetch:
-    src: /usr/sap/{{ item.value.hana_sid|upper }}/sys/global/security/rsecssfs/data/SSFS_{{ item.value.hana_sid|upper }}.dat
-    dest: roles/hsr/files/SSFS_{{ item.value.hana_sid|upper }}.dat
+    src: /usr/sap/{{ item.value.hana_sid|upper }}/SYS/global/security/rsecssfs/data/SSFS_{{ item.value.hana_sid|upper }}.DAT
+    dest: /tmp/sr_key_files/SSFS_{{ item.value.hana_sid|upper }}.DAT
+    fail_on_missing: yes
+    flat: yes
   with_dict: "{{ hsr }}"
   when:
     - hsr_deploy_type is defined
@@ -116,8 +124,10 @@
 
 - name: fetch the remote key 
   fetch:
-    src: /usr/sap/{{ item.value.hana_sid|upper }}/sys/global/security/rsecssfs/key/SSFS_{{ item.value.hana_sid|upper }}.key
-    dest: roles/hsr/files/SSFS_{{ item.value.hana_sid|upper }}.key
+    src: /usr/sap/{{ item.value.hana_sid|upper }}/SYS/global/security/rsecssfs/key/SSFS_{{ item.value.hana_sid|upper }}.KEY
+    dest: /tmp/sr_key_files/SSFS_{{ item.value.hana_sid|upper }}.KEY
+    fail_on_missing: yes
+    flat: yes
   with_dict: "{{ hsr }}"
   when:
     - hsr_deploy_type is defined
@@ -125,8 +135,8 @@
 
 - name: push datfile to secondary hosts
   copy:
-    src: SSFS_{{ item.value.hana_sid|upper }}.dat
-    dest: /usr/sap/{{ item.value.hana_sid|upper }}/sys/global/security/rsecssfs/data/SSFS_{{ item.value.hana_sid|upper }}.dat
+    src: /tmp/sr_key_files/SSFS_{{ item.value.hana_sid|upper }}.DAT
+    dest: /usr/sap/{{ item.value.hana_sid|upper }}/SYS/global/security/rsecssfs/data/SSFS_{{ item.value.hana_sid|upper }}.DAT
     owner: "{{ item.value.hana_sid|lower }}adm"
     group: sapsys
     mode: 0644
@@ -137,8 +147,8 @@
 
 - name: push keyfile to secondary hosts
   copy:
-    src: SSFS_{{ item.value.hana_sid|upper }}.key
-    dest: /usr/sap/{{ item.value.hana_sid|upper }}/sys/global/security/rsecssfs/key/SSFS_{{ item.value.hana_sid|upper }}.key
+    src: /tmp/sr_key_files/SSFS_{{ item.value.hana_sid|upper }}.KEY
+    dest: /usr/sap/{{ item.value.hana_sid|upper }}/SYS/global/security/rsecssfs/key/SSFS_{{ item.value.hana_sid|upper }}.KEY
     owner: "{{ item.value.hana_sid|lower }}adm"
     group: sapsys
     mode: 0644
