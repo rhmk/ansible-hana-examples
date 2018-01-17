@@ -101,6 +101,8 @@ Once you have installed RHEL follow these addtional steps:
   # yum install git ansible
 
 4. Clone the HANA setup repository
+  
+  # git clone https://github.com/rhmk/ansible-hana-sysprep.git 
 
 5. Unpack the previously downloaded hana express package
 
