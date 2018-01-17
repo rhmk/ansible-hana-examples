@@ -1,0 +1,112 @@
+# Getting Started with Hana Express on RHEL 7
+
+## Get the required RHEL subscription
+To install HANA on Red Hat Enterprise Linux you need some additional packages
+which come in a special repository. To get this repository you need to have one
+of the following products:
+
+ - RHEL for SAP Solutions (premium, standard, developer Edition)
+ - RHEL for Business Partner NFRs
+
+The quickest way to achieve this is a personal developer edition of RHEL for
+SAP solutions. Go to https://developers.redhat.com/products/sap/download/
+register as a developer and download the developer edition from there
+
+- Registration Link (http://developers.redhat.com/register) :
+  Here you can either register a new personal account or link an already existing
+  **personal** Red Hat Network account to it.
+- Download Link (https://access.redhat.com/downloads/content/69/ver=/rhel---7/7.2/x86_64/product-software):
+  Here you can download the Installation DVD for RHEL with your previously registered
+  account
+
+*NOTE:* This is a regualar RHEL installation DVD as RHEL for SAP Solutions is no additional
+ product but only a special bundling. The subscription grants you access to the additional
+ packages through our content delivery network(CDN) after installation.
+
+## Download Hana Express
+HANA Express is a reduced Version of SAP HANA and requires less resources than
+HANA Platform Edition. It lacks at least the following features:
+
+- Smart Data Integration (SDI)
+- Smart Data Streaming
+- Sytem Replication (HSR)
+- Dynamic tiering
+
+for a full list see http://news.sap.com/germany/files/2017/01/SAP-HANA-Express-Edition-FAQ-extern.pdf[the HANA Express FAQ]
+
+For this quickstart guide you need to download the Binary installer method as described in detail
+on this page: https://www.sap.com/developer/tutorials/hxe-ua-installing-binary.html
+
+In a nutshell, you need to do the followind
+
+1. Register for Hana Express at https://www.sap.com/sap-hana-express
+2. Install and start the download manager for on-premise install
+3. Select Platform: Linux/x86 and Image: Binary installer
+4. Select Server-Only installer (this is the only one required for this quickstart)
+5. Click the download button (it downloads hxe.tgz)
+
+## Install and Configure your RHEL server
+
+If you are new to Red Hat and want to install it as a guest on your local system,
+we have some handy http://developers.redhat.com/products/rhel/get-started/[Getting Started guides]
+ to walk you through it – for bare metal or a hypervisor on Windows, MacOS, or another Linux.
+
+### Minimum Requirements
+Test environments are typically on virtual machines. The minimum requirement
+to install Hana Express on RHEL is
+
+- 2 cores (4 recommended)
+- 16 GB of memory (server only) or 32GB (server + applications)
+- 32GB swapspace (for 16GB instllation)
+- 120GB diskspace
+
+### Disk Layout
+For a test system the disk layout is not really important. You may have
+everything in / or maybe you want to do a separate partition for /hana that
+should have the size of 2.5-3x main memory.
+
+Create a sparse disk of 120GB and install everything in here with the following layout:
+
+ # df -h
+ Filesystem                    Size  Used Avail Use% Mounted on
+ /dev/mapper/rhel_saphxe-root   86G  994M   81G   2% /
+ devtmpfs                      7.9G     0  7.9G   0% /dev
+ tmpfs                         7.9G     0  7.9G   0% /dev/shm
+ tmpfs                         7.9G  8.4M  7.9G   1% /run
+ tmpfs                         7.9G     0  7.9G   0% /sys/fs/cgroup
+ /dev/vda1                    1014M  122M  893M  12% /boot
+ tmpfs                         1.6G     0  1.6G   0% /run/user/0
+
+### Installation
+Install your RHEL server on this virtual machine. If you are new to RHEL follow the
+installation instructions at http://developers.redhat.com/products/rhel/get-started/
+
+Please change your disklayout according to the recommendations above. For this
+tutorial the core installation is sufficient
+
+Once you have installed RHEL follow these addtional steps:
+
+1. register your fresh installed RHEL
+
+ # subscription-manager register --auto-attach
+ Registering to: subscription.rhsm.redhat.com:443/subscription
+ Username: ********
+ Password: 
+
+2. subscribe to the required channels
+
+
+3. install the following packages
+
+  # yum install git ansible
+
+4. Clone the HANA setup repository
+
+5. Unpack the previously downloaded hana express package
+
+6. configure and run the SAP playbook
+
+7. verify your installation
+
+For more information on how to use the ansible-playbook, please visit
+https://github.com/rhmk/ansible-hana-sysprep/wiki
