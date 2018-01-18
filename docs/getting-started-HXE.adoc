@@ -19,7 +19,7 @@ register as a developer and download the developer edition from there
   Here you can download the Installation DVD for RHEL with your previously registered
   account
 
-*NOTE:* This is a regualar RHEL installation DVD as RHEL for SAP Solutions is no additional
+*NOTE:* This is a regular RHEL installation DVD as RHEL for SAP Solutions is no additional
  product but only a special bundling. The subscription grants you access to the additional
  packages through our content delivery network(CDN) after installation.
 
@@ -93,7 +93,9 @@ Once you have installed RHEL follow these addtional steps:
  Username: ********
  Password: 
 
-2. subscribe to the required channels
+2. subscribe to the required channels (Note: For HANA Express EUS or E4S channels are not required)
+ 
+  # subscription-manager repos --disable="*" --enable=rhel-7-server-rpms --enable=rhel-sap-hana-for-rhel-7-server-rpms
 
 
 3. install the following packages
@@ -105,6 +107,10 @@ Once you have installed RHEL follow these addtional steps:
   # git clone https://github.com/rhmk/ansible-hana-sysprep.git 
 
 5. Unpack the previously downloaded hana express package
+
+  # mkdir /install
+  # cd /install 
+  # tar xzvf hxe.tgz
 
 6. configure and run the SAP playbook
 
