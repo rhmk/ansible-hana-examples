@@ -95,12 +95,11 @@ Once you have installed RHEL follow these addtional steps:
 
 2. subscribe to the required channels (Note: For HANA Express EUS or E4S channels are not required)
  
-  # subscription-manager repos --disable="*" --enable=rhel-7-server-rpms --enable=rhel-sap-hana-for-rhel-7-server-rpms
-
+  # subscription-manager repos --disable="*" --enable=rhel-7-server-rpms --enable=rhel-sap-hana-for-rhel-7-server-rpms --enable=rhel-7-server-extras-rpms
 
 3. install the following packages
 
-  # yum install git ansible
+  # yum install git ansible rhel-system-roles
 
 4. Clone the HANA setup repository
   
