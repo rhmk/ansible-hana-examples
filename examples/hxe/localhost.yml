@@ -20,10 +20,16 @@
           disk_partitioning: false
 
           # SAP-Media Check
-          install_nfs: "vm30.tom.lan:/install"
-          installroot: /install
-          installversion: "hxe/HANA_EXPRESS_20"
-          hana_installdir: "{{ installroot + '/' + installversion }}"
+
+          # the following is used if you have unpacked Hana Express on an NFS Server
+          #install_nfs: "vm30.tom.lan:/install"
+          #installroot: /install
+          #installversion: "hxe/HANA_EXPRESS_20"
+          #hana_installdir: "{{ installroot + '/' + installversion }}"
+
+          ## ENTER the path where you have unpacked the Hana Express package
+          hana_installdir: /install/HANA_EXPRESS_20
+          
 
           hana_pw_hostagent_ssl: "Ab01%%bA"
           id_user_sapadm: "30200"
