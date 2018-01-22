@@ -91,29 +91,67 @@ Once you have installed RHEL follow these addtional steps:
  # subscription-manager register --auto-attach
  Registering to: subscription.rhsm.redhat.com:443/subscription
  Username: ********
- Password: 
+ Password:
 
 2. subscribe to the required channels (Note: For HANA Express EUS or E4S channels are not required)
- 
+
   # subscription-manager repos --disable="*" --enable=rhel-7-server-rpms --enable=rhel-sap-hana-for-rhel-7-server-rpms --enable=rhel-7-server-extras-rpms
 
-3. install the following packages
+3. verify that the correct channels are enabled (output looks similar to this):
+
+  # yum repolist
+  [...]Repo-ID                         Repo-Name:                            Status
+  rhel-7-server-extras-rpms            rhel-7-server-extras-rpms               102
+  rhel-7-server-rpms                   rhel-7-server-rpms                    5.163
+  rhel-sap-hana-for-rhel-7-server-rpms rhel-sap-hana-for-rhel-7-server-rpms      5
+
+4. install the following packages
 
   # yum install git ansible rhel-system-roles
 
-4. Clone the HANA setup repository
-  
-  # git clone https://github.com/rhmk/ansible-hana-sysprep.git 
+5. create an installation directory from where you run all the Installation, e.g. /install
+   and change to this directory for the following steps
 
-5. Unpack the previously downloaded hana express package
+   # mkdir /install
+   # cd /install
 
-  # mkdir /install
-  # cd /install 
+6. Clone the HANA setup repository (in /install)
+
+  # git clone https://github.com/rhmk/ansible-hana-sysprep.git
+
+7. Unpack the previously downloaded hana express package in /install
+
   # tar xzvf hxe.tgz
 
-6. configure and run the SAP playbook
+8. review the playbook and the host_vars file
 
-7. verify your installation
+  # cd /install/ansible-hana-sysprep/examples/hxe
+  # vi localhost.yml
+  # vi host_vars/localhost
+
+9. kick-off the automated Installation (-vv gives a little more )
+
+  # ansible-playbook -vv localhost.yml
+
+After a couple of minutes you should have a working SAP HXE installation.
+For a quick check change to user hxeadm and run 'HDB info'
+
+  # su - hxeadm
+  hxeadm@yourhost:/usr/sap/HXE/HDB90> HDB info
+  USER       PID  PPID %CPU    VSZ   RSS COMMAND
+  hxeadm    8394  8393  0.0 116600  3280 -bash
+  hxeadm    8552  8394  0.0 113256  1656  \_ /bin/sh /usr/sap/HXE/HDB90/HDB info
+  hxeadm    8583  8552  0.0 151060  1780      \_ ps fx -U hxeadm -o user,pid,ppid,pcpu,vsz,rss,args
+  hxeadm    6393     1  0.0  23640  1676 sapstart pf=/hana/shared/HXE/profile/HXE_HDB90_yourhost
+  hxeadm    6401  6393  0.1 541656 31592  \_ /usr/sap/HXE/HDB90/yourhost/trace/hdb.sapHXE_HDB90 -d -nw -f /usr/sap/HXE/HDB90/yourhost/daemon.ini pf=/usr/sap/HXE/SYS/profile/HXE_HDB90_yourhost
+  hxeadm    6417  6401 71.0 6823924 5320340      \_ hdbnameserver
+  hxeadm    6607  6401  3.5 1583896 250692      \_ hdbcompileserver
+  hxeadm    6609  6401 25.8 2088892 842052      \_ hdbpreprocessor
+  hxeadm    6648  6401 77.1 7024264 5568620      \_ hdbindexserver -port 39003
+  hxeadm    6650  6401  2.3 2452140 903256      \_ hdbxsengine -port 39007
+  hxeadm    6948  6401  1.9 1883460 278020      \_ hdbwebdispatcher
+  hxeadm    6302     1  0.8 502424 23000 /usr/sap/HXE/HDB90/exe/sapstartsrv pf=/hana/shared/HXE/profile/HXE_HDB90_yourhost -D -u hxeadm
+  hxeadm@yourhost:/usr/sap/HXE/HDB90>
 
 For more information on how to use the ansible-playbook, please visit
 https://github.com/rhmk/ansible-hana-sysprep/wiki
