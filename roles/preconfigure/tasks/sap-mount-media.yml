@@ -15,7 +15,7 @@
       name: "{{ installroot }}"
       fstype: nfs
       state: mounted
-      opts: "{{ nfs_opts|default(omit) }}
+      opts: "{{ nfs_opts|default(omit) }}"
   register: hana_installdir_mounted
 
 # At the end of the installation the installationdir might be useful to ummount
