@@ -5,11 +5,20 @@
 # Want extensive debugging
 debuglevel: 3
 #
-#  System Registration. 
+#  System Registration.
 # assuming system is properly configured, just want to add required channels
 force_repo_reset: false
 check_repos: true
 
+rhel_7_repos:
+  - rhel-7-server-eus-rpms
+  - rhel-sap-hana-for-rhel-7-server-eus-rpms
+
+rhel_6_repos:
+  - rhel-6-server-eus-rpms
+  - rhel-sap-hana-for-rhel-6-server-eus-rpms
+  - rhel-sfs-for-rhel-6-server-eus-rpms
+  
 # Disk Setup
 # disk setup is done by kickstart, so no need to change anything here
 disk_partitioning: false
@@ -48,4 +57,3 @@ logvols:
     pvs: /dev/vdb1
 
 ...
-    
