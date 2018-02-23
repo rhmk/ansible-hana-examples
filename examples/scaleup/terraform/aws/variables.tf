@@ -22,6 +22,6 @@ variable "aws_region" {
 # RHEL 7.3 (x64)
 variable "aws_amis" {
   default = {
-    eu-central-1 = "ami-e4c63e8b"
+    eu-central-1 = "ami-d866f9b7"
   }
 }
