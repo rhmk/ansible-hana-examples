@@ -10,19 +10,6 @@
 # Requirement is that the systems have access
 # to correctly configured repositories.
 
-# Create the installation disks
-# If you want to add disks, or your installation method (kickstart, Satellite, etc.) does not setup the HANA disks correctly,
-# this should give you the possibility to configure your disks
-# This is not fully tested, so use with caution and test extensively
-# TODO: test or better move into base-os setup role
-# => deprecated: Use system-role
-- include: ./disk-partitioning.yml
-  when:
-    - disk_partitioning
-  tags:
-    - osprep
-    - disk_partitioning
-
 # figure out where the installation media is. This snippet can either mount it centrally from NFS or unpack it locally
 # The following snippet will check if your Hana Install setting is correct and fetches the version of HANA to be installed
 # and stores it in hanaversion.

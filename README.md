@@ -1,14 +1,16 @@
 # ansible-hana-sysprep
 
-## This is the Developer Branch 
-### the current commit contained a couple of fundamental changes, so please switch to stable branch, if you have problems with these changes
+## Release History
 
 This git repository will have the following  branches as follows:
 - master:  current ongoing development, documentation may not be correct
-- stable:  fully tested releases incl. documentation
+- master, tag: v1.0.1 : fully tested release **recommended to use**
+- stable:  fully tested releases incl. documentation, can do scale-up only
 
 ### latest changes
 
+06-Mar-18: removed disk-partining and base-role-setup
+06-Mar-18: created release tag v1.0.1 before restructuring the repository
 24-Nov-17: base-host-setup role is deprecated. This setup will move to my project ansible-generic-roles and more of it to rhel-system-roles/linux-system-roles project
 
 ### Possible deployment options
@@ -27,6 +29,10 @@ This playbook can be used with Command Line (ansible-playbook), Ansible Tower an
 
 Follow the documentation on https://www.ansible.com to setup your ansible environment or ansible-tower server. 
 Follow the instructions on https://access.redhat.com/documentation/en/red-hat-cloudforms/ for CloudForms
+
+### Use with Tower
+There is a playbook designed for use with tower. It calls the roles "precofigure, deployment, hsr"
+In tower project setup chose "hana_tower.yml" as a  playbook
 
 ### Getting started
 In order to use this playbook, you need a brand new RHEL6.x (x<=7) or RHEL 7.x (x<=2) installation.
