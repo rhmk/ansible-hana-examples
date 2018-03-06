@@ -16,12 +16,12 @@
 # This is not fully tested, so use with caution and test extensively
 # TODO: test or better move into base-os setup role
 # => deprecated: Use system-role
-#- include: ./disk-partitioning.yml
-#  when:
-#    - disk_partitioning
-#  tags:
-#    - osprep
-#    - disk_partitioning
+- include: ./disk-partitioning.yml
+  when:
+    - disk_partitioning
+  tags:
+    - osprep
+    - disk_partitioning
 
 # figure out where the installation media is. This snippet can either mount it centrally from NFS or unpack it locally
 # The following snippet will check if your Hana Install setting is correct and fetches the version of HANA to be installed
