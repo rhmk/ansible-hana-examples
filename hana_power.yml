@@ -11,7 +11,7 @@
       # rhel-7-for-power-le-e4s-optional-rpms
       # rhel-7-for-power-le-e4s-satellite-tools-6.2-rpms
 
-    force_rhel_release: 7.3
+    force_rhel_release: 7.4
     force_repo_reset: false
     disk_partitioning: false
     ntp_servers:
@@ -45,8 +45,8 @@
 
 
   roles:
-    - system-registration
+    - mk-ansible-roles.subscribe-rhn
     - rhel-system-roles.timesync
-    - preconfigure
-    - deployment
-    # hsr
+    - mk-ansible-roles.preconfigure
+    - mk-ansible-roles.deploy
+    # mk-ansible-roles.hsr
