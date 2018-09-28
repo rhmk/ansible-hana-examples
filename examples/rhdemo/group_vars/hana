@@ -37,6 +37,13 @@ ntp_servers:
 # Default settings
 # used in the hana deployment roles
 #
+
+# SAP-Media Check
+install_nfs: "tower.example.com:/export"
+installroot: /install/hxe
+installversion: "HANA_EXPRESS_20"
+hana_installdir: "{{ installroot + '/' + installversion }}"
+
 hana_pw_hostagent_ssl: "Ab01%%bA"
 id_user_sapadm: "30200"
 id_group_shm: "30220"

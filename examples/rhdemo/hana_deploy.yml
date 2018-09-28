@@ -2,6 +2,5 @@
 - hosts: all
 
   roles:
-          - mk-ansible-roles.subscribe-rhn
-          - mk-ansible-roles.preconfigure
-          - mk-ansible-roles.deploy
+          - mk-ansible-roles.saphana-preconfigure
+          - mk-ansible-roles.saphana-deploy

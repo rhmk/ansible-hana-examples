@@ -2,5 +2,5 @@
 - hosts: all
 
   roles:
-          - mk-ansible-roles.rhn-subscribe
+          - mk-ansible-roles.subscribe-rhn
           - linux-system-roles.timesync
