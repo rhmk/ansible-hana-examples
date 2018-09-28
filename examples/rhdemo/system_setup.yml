@@ -1,0 +1,6 @@
+---
+- hosts: all
+
+  roles:
+          - mk-ansible-roles.rhn-subscribe
+          - linux-system-roles.timesync

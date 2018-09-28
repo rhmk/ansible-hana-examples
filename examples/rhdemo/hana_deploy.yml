@@ -1,0 +1,7 @@
+---
+- hosts: all
+
+  roles:
+          - mk-ansible-roles.subscribe-rhn
+          - mk-ansible-roles.preconfigure
+          - mk-ansible-roles.deploy

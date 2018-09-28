@@ -1,0 +1,44 @@
+---
+
+#####################################################
+# Default Subscription Information for HANA Servers
+# used in: mk-ansible-roles.rhn-subscribe
+#
+satellite_server: satellite.example.com
+reg_activation_key: sap-hana
+reg_organization_id: RHPDS_Demo
+reg_server_insecure: yes
+reg_osrelease: 7.4
+
+# Can be set to false
+repo_reset: true
+
+repositories:
+     - rhel-7-server-e4s-rpms
+     - rhel-sap-hana-for-rhel-7-server-e4s-rpms
+
+#####################################################
+#
+# Default Timeserver settings
+# used in: rhel-system-roles.timeserver
+#
+ntp_servers:
+        - hostname: 0.rhel.pool.ntp.org
+          iburst: yes
+        - hostname: 1.rhel.pool.ntp.org
+          iburst: yes
+        - hostname: 2.rhel.pool.ntp.org
+          iburst: yes
+        - hostname: 3.rhel.pool.ntp.org
+          iburst: yes
+
+######################################################
+#
+# Default settings
+# used in the hana deployment roles
+#
+hana_pw_hostagent_ssl: "Ab01%%bA"
+id_user_sapadm: "30200"
+id_group_shm: "30220"
+id_group_sapsys: "30200"
+pw_user_sapadm_clear: "Adm12356"
