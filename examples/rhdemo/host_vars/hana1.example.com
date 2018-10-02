@@ -22,7 +22,8 @@ deployment_instance: true
 #hsr_deploy_type: enable
 
 instances:
-  instance01:
+  instance01: 
+    hdblcm_params: "--ignore=check_min_mem,check_platform"
     id_user_sidadm: "30210"
     pw_user_sidadm: "Adm12356"
     hana_pw_system_user_clear: "System123"

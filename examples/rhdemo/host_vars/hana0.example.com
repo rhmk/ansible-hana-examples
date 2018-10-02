@@ -1,5 +1,19 @@
 ---
 
+#####################################################
+# Overwrite Default Subscription Information as this is RHEL 7.5 already
+# used in: mk-ansible-roles.rhn-subscribe
+#
+reg_osrelease: 7.5
+
+# Can be set to false
+repo_reset: true
+
+repositories:
+     - rhel-7-server-rpms
+     - rhel-sap-hana-for-rhel-7-server-rpms
+
+
 hostname: "{{ ansible_hostname }}"
 hana_sid: "HXE"
 hana_instance: "90"
@@ -8,7 +22,8 @@ deployment_instance: true
 #hsr_deploy_type: enable
 
 instances:
-  instance01:
+  instance01: 
+    hdblcm_params: "--ignore=check_min_mem,check_platform"
     id_user_sidadm: "30210"
     pw_user_sidadm: "Adm12356"
     hana_pw_system_user_clear: "System123"

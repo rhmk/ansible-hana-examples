@@ -4,3 +4,4 @@
   roles:
           - mk-ansible-roles.subscribe-rhn
           - linux-system-roles.timesync
+          - mk-ansible-roles.disk-init
