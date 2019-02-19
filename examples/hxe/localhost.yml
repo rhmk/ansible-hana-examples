@@ -39,6 +39,6 @@
 
   roles:
     - linux-system-roles.timesync
-    - mk-ansible-roles.preconfigure
-    - mk-ansible-roles.deploy
+    - mk-ansible-roles.saphana-preconfigure
+    - mk-ansible-roles.saphana-deploy
 
