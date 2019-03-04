@@ -1,0 +1,12 @@
+---
+#
+# OCP 
+
+# Number of CPUs
+vmtype_cpus: 4
+# Memory in GB
+vmtype_mem_mb: 16384
+# Size of Boot disk
+vmtype_boot_disk: 50
+# Size of data disk
+vmtype_data_disk: 100

@@ -1,0 +1,80 @@
+- name: Deploy VM
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    createvm_name: nfssrv
+    createvm_ip: 10.14.11.12
+    #
+    vcenter_cert_val: False  
+
+  # Infos
+  # Dswitch name: "GSCOE Dswitch"
+  tasks:
+     - name: Create a virtual machine from a template
+       vmware_guest:
+         #hostname: ** filled by tower credential
+         #username: ** filled by tower credential
+         #password: ** filled by tower credential
+         validate_certs: "{{ vcenter_cert_val }}"
+         datacenter: "GSCOE Datacenter"
+         cluster: "E7v4 Cluster"
+         folder: "/GSCOE Datacenter/vm/RedHat Demos"
+         name: "{{ createvm_name }}"
+         state: poweredon
+         template: "RHEL7.4-template" 
+         #customization_spec: "rhel 7"
+         customvalues:
+           - key: servertyp
+             value: nfs
+         customization:
+           hostname: "{{ createvm_name }}"
+           domain: gscoe.intern
+         disk:
+         - size_gb: 50
+           type: thin
+           datastore: "RedHat Demos"
+         - size_gb: 200
+           type: thin
+           datastore: "RedHat Demos"
+         hardware:
+           memory_mb: 4096
+           num_cpus: 4
+         networks: 
+           - name: "RedHat Demos 1411"
+             ip: "{{ createvm_ip }}"
+             netmask: 255.255.255.0
+             gateway: 10.14.11.1 
+             domain: gscoe.intern
+             dns_servers: 
+                - 172.16.17.3 
+         wait_for_ip_address: yes
+
+     - name: Add Custom Attribute
+       vmware_guest_custom_attribute_defs:
+          #hostname: "{{ vcenter_hostname }}"
+          #username: "{{ vcenter_username }}"
+          #password: "{{ vcenter_password }}"
+          validate_certs: "{{ vcenter_cert_val }}"
+          state: present
+          attribute_key: rhel_server_type
+       register: defs
+          
+     - debug: var=defs
+
+     - name: Set Custom Attribute
+       vmware_guest_custom_attributes:
+          #hostname: "{{ vcenter_hostname }}"
+          #username: "{{ vcenter_username }}"
+          #password: "{{ vcenter_password }}"
+          validate_certs: "{{ vcenter_cert_val }}"
+          name: "{{ createvm_name }}"
+          folder: "/GSCOE Datacenter/vm/RedHat Demos"
+          datacenter: "GSCOE Datacenter"
+          state: present
+          attributes:
+            - name: rhel_server_type
+              value: nfs
+       register: attributes
+
+     - debug: var=attributes

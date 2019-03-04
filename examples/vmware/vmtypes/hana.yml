@@ -1,0 +1,11 @@
+---
+### HANA
+
+# Number of CPUs
+vmtype_cpus: 8
+# Memory in MB (128 GB)
+vmtype_mem_mb: 131072
+# Size of Boot disk
+vmtype_boot_disk: 50
+# Size of data disk
+vmtype_data_disk: 500

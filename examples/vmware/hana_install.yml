@@ -1,0 +1,17 @@
+---
+# NOTE: This playbook has two plays, because we need the handler to run after the hostagent is installed
+
+- name: Install SAP HANA Hostagent
+  hosts: sat6_hostcollection_hana
+
+  roles:
+    - mk-ansible-roles.sap_hana_hostagent
+
+- name: Install SAP HANA
+  hosts: sat6_hostcollection_hana
+
+  roles:
+    - mk-ansible-roles.sap_hana_deployment
+    # sap-hana-hsr
+
+

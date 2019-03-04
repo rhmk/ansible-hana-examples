@@ -1,0 +1,33 @@
+- name: Deploy VM
+  hosts: localhost
+  gather_facts: no
+
+  vars:
+    createvm_name: nfssrv
+    createvm_ip: 10.14.11.12
+
+  # Infos
+  # Dswitch name: "GSCOE Dswitch"
+  tasks:
+     - name: Create a virtual machine from a template
+       vmware_guest:
+         #hostname: "{{ vcenter_hostname }}"
+         #username: "{{ vcenter_username }}"
+         #password: "{{ vcenter_password }}"
+         validate_certs: "{{ vcenter_cert_val }}"
+         datacenter: "GSCOE Datacenter"
+         cluster: "E7v4 Cluster"
+         folder: "/GSCOE Datacenter/vm/RedHat Demos"
+         name: "{{ createvm_name }}"
+         state: "{{ item }}"
+       with_items:
+         - poweredoff
+         - absent 
+ 
+     - name: remove VMs from Satellite
+       command: hammer host delete --name {{ createvm_name|string }}.gscoe.intern
+       register: delete_from_satellite
+       changed_when: delete_from_satellite is succeeded
+       failed_when: ( delete_from_satellite.rc > 0 ) and (delete_from_satellite.rc != 70)
+       delegate_to: satellite.gscoe.intern
+

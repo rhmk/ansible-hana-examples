@@ -1,0 +1,27 @@
+- name: Get VM Info
+  hosts: localhost
+  gather_facts: no
+  
+  vars:
+     getvm_name: "RHEL7.4-template"
+     getvm_is_template: yes
+     #getvm_name: "satellite"
+
+  tasks:
+     - name: Get VM Info
+       vmware_guest:
+         #hostname:
+         #username:
+         #password: 
+         validate_certs: no
+         name: "{{ getvm_name }}"
+         is_template: "{{ getvm_is_template | default('no') }}"
+       register: out
+
+     - name: Print VM Info
+       debug: var=out
+ 
+
+ 
+
+ 

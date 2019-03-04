@@ -1,0 +1,50 @@
+- name: Poweroff and delete VM
+  hosts: localhost
+  gather_facts: no
+  
+  tasks:
+     - name: Check for valid vmid
+       fail:
+         msg: 'Please define variable vmdel_start'
+       when: (vmdel_start is undefined) or (vmdel_start is none) or (vmdel_start | trim == '')
+
+     - name: set vmdel_num=1
+       set_fact: vmdel_num=1
+       when: vmnum is undefined
+
+     - name: Check for valid vmnum
+       fail:
+         msg: 'vmdel_num is out of range'
+       when: ( vmdel_num|int  < 1 ) or (( vmdel_start|int + vmdel_num|int ) > 199 )
+
+     - name: Poweroff VMs
+       vmware_guest:
+         #hostname:
+         #username:
+         #password:
+         validate_certs: no
+         name: rhvm{{ item }}
+         state: poweredoff
+       register: out
+       loop: "{{ range(vmdel_start, vmdel_start|int + vmdel_num|int , 1)| list }}"
+       ignore_errors: true
+
+     - name: Remove VMs
+       vmware_guest:
+         #hostname:
+         #username:
+         #password: 
+         validate_certs: no
+         name: rhvm{{ item }}
+         state: absent
+       register: out
+       loop: "{{ range(vmdel_start, vmdel_start|int + vmdel_num|int , 1)| list }}"
+ 
+     - name: remove VMs from Satellite
+       command: hammer host delete --name "{{ 'rhvm' +  item|string + '.gscoe.intern' }}"
+       register: delete_from_satellite
+       changed_when: delete_from_satellite is succeeded
+       failed_when: ( delete_from_satellite.rc > 0 ) and (delete_from_satellite.rc != 70)
+       delegate_to: satellite.gscoe.intern
+       loop: "{{ range(vmdel_start, vmdel_start|int + vmdel_num|int , 1)| list }}"
+

@@ -1,0 +1,14 @@
+---
+- name: prepare RHEL for HANA install
+  hosts: sat6_hostcollection_hana
+
+  roles:
+    - mk-ansible-roles.sap_base_settings
+    - mk-ansible-roles.disk-init
+    - mk-ansible-roles.sap_hana_mediacheck
+    - mk-ansible-roles.sap_hana_preconfigure
+    # sap-hostagent-deploy
+    # sap-hana-deploy
+    # sap-hana-hsr
+
+

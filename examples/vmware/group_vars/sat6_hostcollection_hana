@@ -1,0 +1,83 @@
+---
+# Default Settings for SAP Roles
+# --------------------------------------
+# TODOs: 
+#  - Cleartext passwords should go in a Custum Credential and beeing referenced(lookup) here
+#  - Calculate disk sizes according to memory 
+#-----------------------------------------------------------
+# Disk Configuration
+disks:
+        /dev/sdb: vg00
+logvols:
+        hana_shared:
+                size: 128G
+                vol: vg00
+                mountpoint: /hana/shared
+        hana_data:
+                size: 128G
+                vol: vg00
+                mountpoint: /hana/data
+        hana_logs:
+                size: 64G
+                vol: vg00
+                mountpoint: /hana/logs
+#------------------------------------------------------------------------------------
+# Role: sap-base-settings
+sap_hostname: '{{ ansible_hostname }}'
+sap_domain: '{{ ansible_domain }}'
+sap_ip: '{{ ansible_default_ipv4.address }}'
+#------------------------------------------------------------------------------------
+# sap-hana-mediacheck
+# SAP-Media Check (get unpacked HANA from Mountpoint)
+sap_hana_mediacheck_serverpath: "10.14.11.12:/export/sap"
+sap_hana_mediacheck_mountpoint: /install
+#sap_hana_installdir: "{{ sap_hana_mediacheck_mountpoint + '/HANA_EXPRESS_20/DATA_UNITS/HDB_SERVER_LINUX_' + ansible_architecture|upper }}"
+sap_hana_installdir: "{{ sap_hana_mediacheck_mountpoint + '/IMDB_SERVER20_036/SAP_HANA_DATABASE' }}"
+#------------------------------------------------------------------------------------
+# sap-hana-preconfigure
+#sap_hana_preconfigure_min_package_check: false
+sap_hana_preconfigure_reboot_after_update: true
+sap_hana_preconfigure_reboot_timeout: 200
+#------------------------------------------------------------------------------------
+### Now Some SID Magic
+hana_sid: HXE
+hana_instance_number: 90
+
+# SAP HANA Hostagent
+#------------------------------------------------------------------------------------
+# UID/GID for sapadm:sapsys
+sap_uid_sapadm: 30200
+sap_gid_sapsys: 30200
+
+# Passwords in cleartext should go in a vault file 
+# password for user sapadm
+sap_hana_hostagent_sapadm_pw_clear: "MyS3cret!"
+# Secret for password encryption
+sap_hana_hostagent_ssl_pw: "MyS3cret!"
+
+## In case you want to use the shipped hostagent from HANADB Use this command definition:
+sap_hana_hostagent_archive: "{{ sap_hana_installdir }}/server/HOSTAGENT.TGZ"
+sap_hana_hostagent_unarchive_cmd: "tar --strip-components=3 -xzf "
+#------------------------------------------------------------------------------------
+# sap-hana-deploy (please watch -- Variable reorg will come)
+pw_user_sapadm_clear: "{{ sap_hana_hostagent_sapadm_pw_clear }}"
+id_user_sapadm: "{{ sap_uid_sapadm }}"
+id_group_sapsys: "{{ sap_gid_sapsys }}"
+id_group_shm: "30220"
+
+deployment_instance: true
+#hsr_deploy_type: enable
+instances:
+  instance01:
+    hdblcm_params: "--ignore=check_min_mem,check_platform"
+    id_user_sidadm: "{{ 30300 + hana_instance_number|int }}"
+    pw_user_sidadm: "Adm12356"
+    hana_pw_system_user_clear: "System123"
+    hana_components: "client,server"
+    hana_system_type: "Master"
+    id_group_shm: "{{ id_group_shm }}"
+    hana_instance_hostname: "{{ sap_hostname }}"
+    hana_addhosts:
+    hana_sid: "{{ hana_sid|upper }}"
+    hana_instance_number: "{{ hana_instance_number }}"
+    hana_system_usage: custom

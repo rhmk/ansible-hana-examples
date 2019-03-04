@@ -1,0 +1,23 @@
+#
+# required roles from other sources
+# see also: http://docs.ansible.com/ansible/galaxy.html#advanced-control-over-role-requirements-files
+#
+
+# update system from galaxy:
+#
+- src: mk-ansible-roles.disk-init
+- src: mk-ansible-roles.subscribe-rhn
+- src: redhataccess.redhat-access-insights-client
+- src: linux-system-roles.timesync
+- src: mk-ansible-roles.sap_base_settings
+- src: mk-ansible-roles.sap_hana_mediacheck
+- src: mk-ansible-roles.sap_hana_preconfigure
+- src: mk-ansible-roles.sap_hana_hostagent
+- src: mk-ansible-roles.sap_hana_deployment
+- src: mk-ansible-roles.saphana-hsr
+
+
+# The following role is also available via "yum install rhel-system-roles"
+# Use this, if you do not have the extras repo enabled
+#- src: linux-system-roles.timesync
+
