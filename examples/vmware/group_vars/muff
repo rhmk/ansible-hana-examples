@@ -1,0 +1,21 @@
+
+# Scale out Cluster
+sap_hana_deployment_cluster:
+  - { server1, role=worker }
+  - { server2, role=master }
+  - { server3, role=standby}
+
+
+# Scale_up 
+sap_hanae_deplyment_cluster:
+  - { server, role=master }
+
+
+-------
+
+
+=> 1. Schritt 
+
+=> nodelist = sap_hane_deploycluster ohne sap_hostname
+
+=> deployment_instance=true, für das 1. Listenelement, alle anderen false
