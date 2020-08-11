@@ -1,7 +1,12 @@
-- hosts: all
-  gather_facts: no
+- name: Gather Facts and Check Connections
+  hosts: all
+  gather_facts: yes
 
   tasks:
     - name: ensure all hosts are reachable
       ping:
+
+    - name: Facts have been gathered
+      debug:
+        msg: "Facts are now gathered"
 
